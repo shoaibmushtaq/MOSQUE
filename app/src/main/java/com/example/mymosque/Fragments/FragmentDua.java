@@ -1,6 +1,5 @@
 package com.example.mymosque.Fragments;
 
-import android.app.ActionBar;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -11,7 +10,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.example.mymosque.Adapter.AdapterDuas;
 import com.example.mymosque.R;
 
 public class FragmentDua extends Fragment {
@@ -47,13 +45,8 @@ public class FragmentDua extends Fragment {
         //</For Toolbar>
 
 
-        recyclerView = (RecyclerView)v.findViewById(R.id.RV_DUAS);
 
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
-        recyclerView.setLayoutManager(linearLayoutManager);
 
-        AdapterDuas recyclerViewAdapter = new AdapterDuas(getActivity());
-        recyclerView.setAdapter(recyclerViewAdapter);
 
 
 

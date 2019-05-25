@@ -50,28 +50,11 @@ public class FragmentHome extends Fragment {
 
 
        //((AppCompatActivity) getActivity()).getSupportActionBar().hide();
-
-
-
-
-
 //        TextView mTitle = (TextView) toolbar.findViewById(R.id.toolbar_title);
 //
 //
 //        mTitle.setText("Prayer TImes");
-
-
 //*/
-
-
-
-
-
-
-
-
-
-
 
     }//end of onCreate method
 
@@ -84,10 +67,6 @@ public class FragmentHome extends Fragment {
         android.support.v7.widget.Toolbar toolbar = (android.support.v7.widget.Toolbar) getActivity().findViewById(R.id.toolbar);
         toolbar.setVisibility(View.GONE);
         //</For Toolbar>
-
-
-
-
 
     /*    Button mosqueBtn = (Button) v.findViewById(R.id.MosqueBTN);
         mosqueBtn.setOnClickListener(new View.OnClickListener() {

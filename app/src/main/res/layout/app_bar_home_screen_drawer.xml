@@ -16,17 +16,14 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-        <!--    <ImageView
+            <ImageView
                 android:id="@+id/humburgerIcon"
                 android:layout_marginTop="@dimen/_8sdp"
                 android:layout_marginRight="@dimen/_15sdp"
                 android:layout_alignParentEnd="true"
                 android:layout_width="@dimen/_25sdp"
                 android:layout_height="@dimen/_25sdp"
-                android:background="@drawable/ic_menu_white_24dp"/>-->
-
-
-
+                android:background="@drawable/ic_menu_white_24dp"/>
 
             <ImageView
                 android:id="@+id/Logo"
@@ -54,32 +51,11 @@
                 android:paddingHorizontal="@dimen/_12sdp"/>
 
 
-
-
-
-
-
-
-
-
-
-
-
         </RelativeLayout>
-
-
-
-
-
-
-
-
-
 
     </android.support.design.widget.AppBarLayout>
 
     <include layout="@layout/content_main" />
-
 
 
 </android.support.design.widget.CoordinatorLayout>
