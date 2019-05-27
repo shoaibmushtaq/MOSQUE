@@ -24,12 +24,13 @@ import android.widget.Toast;
 import com.example.mymosque.Fragments.FragementProfile;
 import com.example.mymosque.Fragments.FragmentFeedback;
 import com.example.mymosque.Fragments.FragmentNearestMasajid;
+import com.example.mymosque.Models.MasjidModel;
 
 import java.util.ArrayList;
 
 public class RV_FindMasajid extends RecyclerView.Adapter<RV_FindMasajid.ViewHolder> implements View.OnClickListener {
 
-    private ArrayList<String> MasajidNames = new ArrayList<>();
+        private ArrayList<MasjidModel> MasajidNames = new ArrayList<MasjidModel>();
 
     private Context mContext;
 
@@ -38,11 +39,13 @@ public class RV_FindMasajid extends RecyclerView.Adapter<RV_FindMasajid.ViewHold
 
 
 
-    public RV_FindMasajid(Context Context, ArrayList<String> Names) {
+    public RV_FindMasajid(Context Context, ArrayList<MasjidModel> Names) {
         this.mContext = Context;
         this.MasajidNames = Names;
 
     }
+
+
     @NonNull
     @Override
     public RV_FindMasajid.ViewHolder onCreateViewHolder (@NonNull ViewGroup parent, int viewType){
@@ -56,20 +59,8 @@ public class RV_FindMasajid extends RecyclerView.Adapter<RV_FindMasajid.ViewHold
     @Override
     public void onBindViewHolder (@NonNull RV_FindMasajid.ViewHolder holder, final int position){
 
-        holder.MasajidName.setText(MasajidNames.get(position));
-
-
-        /*holder.Image.setOnClickListener(this);
-        holder.MasajidName.setOnClickListener(this);*/
+        holder.MasajidName.setText(MasajidNames.get(position).getName());
         holder.itemView.setOnClickListener(this);
-
-
-
-
-
-
-
-
     }
 
 
@@ -77,6 +68,7 @@ public class RV_FindMasajid extends RecyclerView.Adapter<RV_FindMasajid.ViewHold
     public int getItemCount () {
         return MasajidNames.size();
     }
+
 
     @Override
     public void onClick(View v) {

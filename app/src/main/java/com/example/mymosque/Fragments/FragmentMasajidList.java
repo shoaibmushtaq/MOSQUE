@@ -78,8 +78,8 @@ public class FragmentMasajidList extends Fragment {
         RecyclerView recyclerView =(RecyclerView) v.findViewById(R.id.RV_NearestMasajidList);
         LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false);
         recyclerView.setLayoutManager(layoutManager);
-        RV_FindMasajid adapter = new RV_FindMasajid(getActivity(),MasajidName);
-        recyclerView.setAdapter(adapter);
+      //  RV_FindMasajid adapter = new RV_FindMasajid(getActivity(),MasajidName);
+      //  recyclerView.setAdapter(adapter);
 
 
 
