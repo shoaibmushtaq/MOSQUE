@@ -8,14 +8,17 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.example.mymosque.JamaatTimes;
 import com.example.mymosque.R;
+
+import org.json.JSONArray;
 
 import java.util.ArrayList;
 
 public class AdapterRVJamaatTimes extends RecyclerView.Adapter<AdapterRVJamaatTimes.ViewHolder> {
 
 
-    private ArrayList<String> JamaatTimes = new ArrayList<>();
+    private ArrayList<JamaatTimes> JamaatTimes = new ArrayList<>();
 
     private Context mContext;
 
@@ -24,9 +27,9 @@ public class AdapterRVJamaatTimes extends RecyclerView.Adapter<AdapterRVJamaatTi
 
 
 
-    public AdapterRVJamaatTimes(Context Context, ArrayList<String> Names) {
+    public AdapterRVJamaatTimes(Context Context, ArrayList<com.example.mymosque.JamaatTimes> jamaatTimes) {
         this.mContext = Context;
-        this.JamaatTimes = Names;
+        this.JamaatTimes = jamaatTimes;
 
     }
     @NonNull
@@ -42,7 +45,12 @@ public class AdapterRVJamaatTimes extends RecyclerView.Adapter<AdapterRVJamaatTi
     @Override
     public void onBindViewHolder (@NonNull AdapterRVJamaatTimes.ViewHolder holder, final int position){
 
-        holder.Time.setText(JamaatTimes.get(position));
+
+        holder.fajar.setText(JamaatTimes.get(position).getFajr());
+        holder.zuhur.setText(JamaatTimes.get(position).getZhuhr());
+        holder.asr.setText(JamaatTimes.get(position).getAsr());
+        holder.maghrib.setText(JamaatTimes.get(position).getMaghrib());
+        holder.isha.setText(JamaatTimes.get(position).getIsha());
 
 
 
@@ -61,14 +69,18 @@ public class AdapterRVJamaatTimes extends RecyclerView.Adapter<AdapterRVJamaatTi
 
     public class ViewHolder extends RecyclerView.ViewHolder {
 
-        TextView Time;
 
+TextView date,fajar,zuhur,asr,maghrib,isha;
 
         public ViewHolder(View itemView) {
             super(itemView);
+date=(TextView) itemView.findViewById(R.id.date);
+fajar=(TextView) itemView.findViewById(R.id.txt_fajr_time_beginning);
+            zuhur=itemView.findViewById(R.id.txt_zuhr_time_beginning);
+            asr=itemView.findViewById(R.id.txt_asr_time_beginning);
+            maghrib=itemView.findViewById(R.id.txt_maghrib_time_beginning);
+            isha=itemView.findViewById(R.id.txt_isha_time_beginning);
 
-
-            Time  = itemView.findViewById(R.id.txt_isha_time_beginning);
 
 
 
