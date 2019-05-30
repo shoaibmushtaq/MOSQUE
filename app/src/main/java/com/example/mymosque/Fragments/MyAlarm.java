@@ -72,7 +72,7 @@ public class MyAlarm extends BroadcastReceiver {
 
         //Create notification
         NotificationCompat.Builder alamNotificationBuilder = new NotificationCompat.Builder(
-                context).setContentTitle("azan-e-"+azan_name).setSmallIcon(R.drawable.azanicon).setLargeIcon(BitmapFactory.decodeResource(context.getResources(),R.drawable.azanicon))
+                context).setContentTitle("azan-e-"+azan_name).setSmallIcon(R.drawable.mosque_icon).setLargeIcon(BitmapFactory.decodeResource(context.getResources(),R.drawable.mosque_icon))
                 .setStyle(new NotificationCompat.BigTextStyle().bigText(azan_name))
 
                 .setContentText("Alarm notification").setAutoCancel(false);
