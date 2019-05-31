@@ -5,6 +5,7 @@ import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
@@ -13,6 +14,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
@@ -27,6 +29,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.MissingFormatArgumentException;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -35,31 +38,36 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 public class FragmentSecond extends Fragment {
-
+    public static final String TAG = "MyFragment.TAG";
     private ArrayList<String> NamazTimes = new ArrayList<>();
     View v;
     String date;
+    SharedPreferences getprefs;
 
-
+Button apply;
     RecyclerView recyclerView;
     ArrayList<MonthlyTime> monthlyTimes;
+    String Alarmcheck;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         v = inflater.inflate(R.layout.fragment_second, container, false);
 
         v.findViewById(R.id.secondfrag);
+        getprefs=getActivity().getSharedPreferences("Alaram check", Context.MODE_PRIVATE);
+        Alarmcheck=getprefs.getString("alarm is set","no");
         monthlyTimes = new ArrayList<>();
         recyclerView = (RecyclerView) v.findViewById(R.id.RV_times);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(linearLayoutManager);
-
-        date = get_curr_date();
-        fetch_json("http://masjidi.co.uk/api/", 38, date);
-
+   date = get_curr_date();
+        refresh_json();
         return v;
     }
+public void refresh_json(){
+    fetch_json("http://masjidi.co.uk/api/", 38, date);
 
+}
     public String get_curr_date() {
         Date c = Calendar.getInstance().getTime();
 
@@ -87,8 +95,9 @@ public class FragmentSecond extends Fragment {
                 monthlyTimes = (ArrayList<MonthlyTime>) response.body();
 
                 AdapterRVTimes rvTimes = new AdapterRVTimes(getContext(), monthlyTimes);
-                setCalendar(monthlyTimes);
-
+if(Alarmcheck.equals("yes")) {
+    setCalendar(monthlyTimes);
+}
                 recyclerView.setAdapter(rvTimes);
 
 
@@ -97,7 +106,7 @@ public class FragmentSecond extends Fragment {
 
             @Override
             public void onFailure(Call<List<MonthlyTime>> call, Throwable t) {
-                Log.d("failure", t.getCause().toString());
+//                Log.d("failure", t.getCause().toString());
             }
         });
     }
@@ -173,7 +182,7 @@ public class FragmentSecond extends Fragment {
                 //setting ISha Calendar
                 calendarISha.set(calendarISha.get(Calendar.YEAR), calendarISha.get(Calendar.MONTH), calendarISha.get(Calendar.DAY_OF_MONTH),
                         Integer.parseInt(IShaTimehour), Integer.parseInt(IShaTimeMinutes), 0);
-          Toast.makeText(getContext(),"zuhur time"+prayerTimeList.get(i).getZhuhr(),Toast.LENGTH_LONG).show();
+
                 ArrayList<Calendar> calendars = new ArrayList<>();
                 calendars.add(calendarfajar);
                 calendars.add(calendarzuhur);
@@ -189,6 +198,7 @@ public class FragmentSecond extends Fragment {
    // }
 
         public void setAlarm(ArrayList<Calendar> calendars){
+        Toast.makeText(getContext(),"Alarm is set",Toast.LENGTH_LONG).show();
             for(int j=0;j<calendars.size();j++){
                 if(System.currentTimeMillis()>calendars.get(j).getTimeInMillis()){
                     calendars.get(j).add(Calendar.DATE,1);
