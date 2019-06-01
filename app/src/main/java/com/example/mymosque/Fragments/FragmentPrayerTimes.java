@@ -63,7 +63,7 @@ editor=getActivity().getSharedPreferences("Alaram check", Context.MODE_PRIVATE).
         TextView mTitle = (TextView) toolbar.findViewById(R.id.toolbar_title);
         mTitle.setText("Prayer Times");
         //</For Toolbar>
-        initbutton();
+       // initbutton();
 
         time=(TextView) v.findViewById(R.id.txt_time);
         date=(TextView) v.findViewById(R.id.text_date);
@@ -71,8 +71,8 @@ editor=getActivity().getSharedPreferences("Alaram check", Context.MODE_PRIVATE).
         final ViewPager pager = (ViewPager) v.findViewById(R.id.viewPager);
         ImageView leftNav = (ImageView) v.findViewById(R.id.left_nav);
         ImageView rightNav = (ImageView) v.findViewById(R.id.right_nav);
-FragmentSecond fragmentSecond=new FragmentSecond();
-        applyAlarm.setOnClickListener(new View.OnClickListener() {
+//FragmentSecond fragmentSecond=new FragmentSecond();
+     /*   applyAlarm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 applyAlarm.setVisibility(View.GONE);
@@ -90,7 +90,7 @@ FragmentSecond fragmentSecond=new FragmentSecond();
 
             }
         });
-disableAlarm.setOnClickListener(new View.OnClickListener() {
+/*disableAlarm.setOnClickListener(new View.OnClickListener() {
     @Override
     public void onClick(View v) {
         disableAlarm.setVisibility(View.GONE);
@@ -102,7 +102,7 @@ disableAlarm.setOnClickListener(new View.OnClickListener() {
         fragmentSecond.refresh_json();
 
     }
-});
+});*/
         // Images left navigation
 //get current date
         Date c = Calendar.getInstance().getTime();

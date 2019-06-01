@@ -120,7 +120,8 @@ fetch_json("http://masjidi.co.uk/api/",38,date);
 
             @Override
             public void onFailure(Call<List<BegningTimes>> call, Throwable t) {
-                Log.d("fasilure",t.getCause().toString());
+
+                Log.d("failure",t.getCause().toString());
             }
         });
     }

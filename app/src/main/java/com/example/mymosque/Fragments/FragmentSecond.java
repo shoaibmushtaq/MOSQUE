@@ -95,9 +95,9 @@ public void refresh_json(){
                 monthlyTimes = (ArrayList<MonthlyTime>) response.body();
 
                 AdapterRVTimes rvTimes = new AdapterRVTimes(getContext(), monthlyTimes);
-if(Alarmcheck.equals("yes")) {
+
     setCalendar(monthlyTimes);
-}
+
                 recyclerView.setAdapter(rvTimes);
 
 
