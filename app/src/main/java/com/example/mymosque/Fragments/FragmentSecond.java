@@ -182,7 +182,7 @@ public void refresh_json(){
                 //setting ISha Calendar
                 calendarISha.set(calendarISha.get(Calendar.YEAR), calendarISha.get(Calendar.MONTH), calendarISha.get(Calendar.DAY_OF_MONTH),
                         Integer.parseInt(IShaTimehour), Integer.parseInt(IShaTimeMinutes), 0);
-          Toast.makeText(getContext(),"zuhur time"+prayerTimeList.get(i).getZhuhr(),Toast.LENGTH_LONG).show();
+
                 ArrayList<Calendar> calendars = new ArrayList<>();
                 calendars.add(calendarfajar);
                 calendars.add(calendarzuhur);
