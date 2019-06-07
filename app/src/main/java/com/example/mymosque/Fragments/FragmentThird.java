@@ -37,7 +37,7 @@ public class FragmentThird extends Fragment {
         v = inflater.inflate(R.layout.fragment_third, container, false);
         v.findViewById(R.id.thirdfrag);
 String date=get_curr_date();
-        fetch_json("http://masjidi.co.uk/api/",38,date);
+        fetch_json("http://masjidi.co.uk/api/",38,"30-05-2019");
         recyclerView=(RecyclerView) v.findViewById(R.id.RV_jamaat_times);
         LinearLayoutManager linearLayoutManager=new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(linearLayoutManager);

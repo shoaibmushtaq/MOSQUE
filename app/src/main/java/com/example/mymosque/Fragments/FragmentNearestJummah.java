@@ -7,6 +7,8 @@ import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 
 import com.example.mymosque.MainActivity;
@@ -16,7 +18,8 @@ public class FragmentNearestJummah extends Fragment {
 
 
     View v;
-
+Button search_btn;
+EditText cityname,postalcode;
 
 
     @Override

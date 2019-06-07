@@ -51,7 +51,8 @@ public class FragmentSettings extends Fragment {
 
 
         return v;
-    }//End onCreateView Method
+}//
+// End onCreateView Method
 
 
 

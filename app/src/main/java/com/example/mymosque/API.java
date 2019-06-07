@@ -20,4 +20,6 @@ public interface API {
     Call<List<MonthlyTime>> getmonthlytime(@Path("userid") int userid,@Path("curr_date") String curr_date);
     @GET("getMontlyPrayerTime/{userid}/{curr_date}/J")
     Call<List<JamaatTimes>> getjamaatTimes(@Path("userid") int userid,@Path("curr_date") String curr_date);
+    @GET("getcity")
+    Call<List<City>> getCitiesList();
 }

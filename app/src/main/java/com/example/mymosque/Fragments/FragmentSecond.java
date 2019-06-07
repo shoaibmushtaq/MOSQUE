@@ -43,7 +43,7 @@ public class FragmentSecond extends Fragment {
     View v;
     String date;
     SharedPreferences getprefs;
-
+static Boolean alarm_check;
 Button apply;
     RecyclerView recyclerView;
     ArrayList<MonthlyTime> monthlyTimes;
@@ -52,7 +52,7 @@ Button apply;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         v = inflater.inflate(R.layout.fragment_second, container, false);
-
+alarm_check=false;
         v.findViewById(R.id.secondfrag);
         getprefs=getActivity().getSharedPreferences("Alaram check", Context.MODE_PRIVATE);
         Alarmcheck=getprefs.getString("alarm is set","no");
@@ -65,7 +65,7 @@ Button apply;
         return v;
     }
 public void refresh_json(){
-    fetch_json("http://masjidi.co.uk/api/", 38, date);
+    fetch_json("http://masjidi.co.uk/api/", 38,"30-5-2019");
 
 }
     public String get_curr_date() {
@@ -95,9 +95,11 @@ public void refresh_json(){
                 monthlyTimes = (ArrayList<MonthlyTime>) response.body();
 
                 AdapterRVTimes rvTimes = new AdapterRVTimes(getContext(), monthlyTimes);
+if(getprefs.getString("alarm is set","no").equals("yes")) {
+    Toast.makeText(getContext(), "yes", Toast.LENGTH_LONG).show();
 
     setCalendar(monthlyTimes);
-
+}
                 recyclerView.setAdapter(rvTimes);
 
 
@@ -106,7 +108,7 @@ public void refresh_json(){
 
             @Override
             public void onFailure(Call<List<MonthlyTime>> call, Throwable t) {
-//                Log.d("failure", t.getCause().toString());
+            Log.d("failure", t.getCause().toString());
             }
         });
     }
@@ -121,44 +123,44 @@ public void refresh_json(){
         String formattedDate = null;
 
 
-        for (int i = 0; i < prayerTimeList.size(); i++) {
-            String strDate = prayerTimeList.get(i).getDate();
-            SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");
-            try {
-                datec = df.parse(strDate);
+      //  for (int i = 0; i < prayerTimeList.size(); i++) {
+          //  String strDate = prayerTimeList.get(i).getDate();
+            //SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+            //try {
+              //  datec = df.parse(strDate);
 
-                SimpleDateFormat fd = new SimpleDateFormat("yyyy-MM-dd");
-                formattedDate = fd.format(datec);
-                Log.d("second", formattedDate);
-            } catch (ParseException e) {
-                e.printStackTrace();
-            }
+                //SimpleDateFormat fd = new SimpleDateFormat("yyyy-MM-dd");
+                //formattedDate = fd.format(datec);
+                //Log.d("second", formattedDate);
+            //} catch (ParseException e) {
+              //  e.printStackTrace();
+            //}
 
-            if (formattedDate.equals(date)) {
+            //if (formattedDate.equals(date)) {
 
 
                 //  if (Build.VERSION.SDK_INT >= 23)
-
-                String fajrTime = prayerTimeList.get(i).getFajr();
+//curently replacing .get(i) with .get(0) because api's current datte is causing problem
+                String fajrTime = prayerTimeList.get(0).getFajr();
                 String fajrTimehour = fajrTime.substring(0, 2);
                 String fajrTimeMinutes = fajrTime.substring(3, 5);
                 //setting zuhur time
-                String ZuhrTime = prayerTimeList.get(i).getZhuhr();
+                String ZuhrTime = prayerTimeList.get(0).getZhuhr();
                 String ZuhrTimehour = ZuhrTime.substring(0, 2);
                 String ZuhurTimeMinutes = ZuhrTime.substring(3, 5);
                 //setting asr time
 
-                String AsrTime = prayerTimeList.get(i).getAsr();
+                String AsrTime = prayerTimeList.get(0).getAsr();
                 String AsrTimehour = AsrTime.substring(0, 2);
                 String AsrTimeMinutes = AsrTime.substring(3, 5);
                 //setting MaghribTime
-                String MaghribTime = prayerTimeList.get(i).getMaghrib();
+                String MaghribTime = prayerTimeList.get(0).getMaghrib();
                 String MaghribTimehour = MaghribTime.substring(0, 2);
                 String MaghribTimeMinutes = MaghribTime.substring(3, 5);
 
 
                 //setting isha time
-                String IShaTime = prayerTimeList.get(i).getIsha();
+                String IShaTime = prayerTimeList.get(0).getIsha();
                 String IShaTimehour = IShaTime.substring(0, 2);
                 String IShaTimeMinutes = IShaTime.substring(3, 5);
                 //setting calendars
@@ -182,7 +184,7 @@ public void refresh_json(){
                 //setting ISha Calendar
                 calendarISha.set(calendarISha.get(Calendar.YEAR), calendarISha.get(Calendar.MONTH), calendarISha.get(Calendar.DAY_OF_MONTH),
                         Integer.parseInt(IShaTimehour), Integer.parseInt(IShaTimeMinutes), 0);
-
+Toast.makeText(getContext(),"asr time"+prayerTimeList.get(0).getAsr(),Toast.LENGTH_LONG).show();
                 ArrayList<Calendar> calendars = new ArrayList<>();
                 calendars.add(calendarfajar);
                 calendars.add(calendarzuhur);
@@ -192,13 +194,13 @@ public void refresh_json(){
                 setAlarm(calendars);
             }
             //}
-        }
-    }
+       // }
+    //}
 
    // }
 
         public void setAlarm(ArrayList<Calendar> calendars){
-        Toast.makeText(getContext(),"Alarm is set",Toast.LENGTH_LONG).show();
+        Toast.makeText(getContext(),"Alarm setting",Toast.LENGTH_LONG).show();
             for(int j=0;j<calendars.size();j++){
                 if(System.currentTimeMillis()>calendars.get(j).getTimeInMillis()){
                     calendars.get(j).add(Calendar.DATE,1);
@@ -216,6 +218,23 @@ public void refresh_json(){
 
             }
     }
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

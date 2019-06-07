@@ -62,35 +62,36 @@ editor=getActivity().getSharedPreferences("Alaram check", Context.MODE_PRIVATE).
         toolbar.setVisibility(View.VISIBLE);
         TextView mTitle = (TextView) toolbar.findViewById(R.id.toolbar_title);
         mTitle.setText("Prayer Times");
+        applyAlarm=(Button) v.findViewById(R.id.ApplyAlarm);
         //</For Toolbar>
        // initbutton();
-
+disableAlarm=(Button) v.findViewById(R.id.DisableAlarm);
         time=(TextView) v.findViewById(R.id.txt_time);
         date=(TextView) v.findViewById(R.id.text_date);
         islamic_Calendar=v.findViewById(R.id.islamic_date);
         final ViewPager pager = (ViewPager) v.findViewById(R.id.viewPager);
         ImageView leftNav = (ImageView) v.findViewById(R.id.left_nav);
         ImageView rightNav = (ImageView) v.findViewById(R.id.right_nav);
-//FragmentSecond fragmentSecond=new FragmentSecond();
-     /*   applyAlarm.setOnClickListener(new View.OnClickListener() {
+FragmentSecond fragmentSecond=new FragmentSecond();
+       applyAlarm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 applyAlarm.setVisibility(View.GONE);
                 String currentdate=fragmentSecond.get_curr_date();
-                Toast.makeText(getContext(),"Alarm set",Toast.LENGTH_LONG).show();
+                //Toast.makeText(getContext(),"Alarm set",Toast.LENGTH_LONG).show();
                 editor.putString("alarm_date",currentdate);
                 editor.putString("alarm is set","yes");
                 editor.putInt("button is Apply",1);
                 editor.putString("Activate disable button","yes");
 
                 editor.apply();
-                fragmentSecond.refresh_json();
-                disableAlarm.setVisibility(View.VISIBLE);
+                FragmentSecond.alarm_check=true;
+         disableAlarm.setVisibility(View.VISIBLE);
 
 
             }
         });
-/*disableAlarm.setOnClickListener(new View.OnClickListener() {
+disableAlarm.setOnClickListener(new View.OnClickListener() {
     @Override
     public void onClick(View v) {
         disableAlarm.setVisibility(View.GONE);
@@ -99,10 +100,10 @@ editor=getActivity().getSharedPreferences("Alaram check", Context.MODE_PRIVATE).
         editor.putString("alarm is set","no");
         editor.apply();
         applyAlarm.setVisibility(View.VISIBLE);
-        fragmentSecond.refresh_json();
+       // fragmentSecond.refresh_json();
 
     }
-});*/
+});
         // Images left navigation
 //get current date
         Date c = Calendar.getInstance().getTime();

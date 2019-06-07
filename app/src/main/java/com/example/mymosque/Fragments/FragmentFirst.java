@@ -51,7 +51,7 @@ ArrayList<BegningTimes> begningTimesArrayList;
         v = inflater.inflate(R.layout.fragment_first, container, false);
 
 begningTimesArrayList=new ArrayList<>();
-        String date=get_curr_date();
+        //String date=get_curr_date();
         sehritime=(TextView) v.findViewById(R.id.sehritime);
         fajarstarttime=(TextView) v.findViewById(R.id.txt_fajr_start_time);
         fajarJamaatTime=(TextView) v.findViewById(R.id.txt_fajr_jamaat_time);
@@ -65,7 +65,7 @@ begningTimesArrayList=new ArrayList<>();
         IShaStartTime=(TextView) v.findViewById(R.id.txt_isha_start_time);
         IshaJammatTime=(TextView) v.findViewById(R.id.txt_isha_jamaat_time);
 
-fetch_json("http://masjidi.co.uk/api/",38,date);
+fetch_json("http://masjidi.co.uk/api/",38,"30-5-2019");
 
 
 
