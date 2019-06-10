@@ -66,6 +66,18 @@ editor=getActivity().getSharedPreferences("Alaram check", Context.MODE_PRIVATE).
         //</For Toolbar>
        // initbutton();
 disableAlarm=(Button) v.findViewById(R.id.DisableAlarm);
+
+SharedPreferences ac=getActivity().getSharedPreferences("Alaram check",Context.MODE_PRIVATE);
+if(ac.getString("alarm is set","no").equals("no")){
+
+    applyAlarm.setVisibility(View.VISIBLE);
+    disableAlarm.setVisibility(View.GONE);
+}
+else{
+
+    applyAlarm.setVisibility(View.GONE);
+    disableAlarm.setVisibility(View.VISIBLE);
+}
         time=(TextView) v.findViewById(R.id.txt_time);
         date=(TextView) v.findViewById(R.id.text_date);
         islamic_Calendar=v.findViewById(R.id.islamic_date);
@@ -85,7 +97,7 @@ FragmentSecond fragmentSecond=new FragmentSecond();
                 editor.putString("Activate disable button","yes");
 
                 editor.apply();
-                FragmentSecond.alarm_check=true;
+              //  FragmentSecond.alarm_check=true;
          disableAlarm.setVisibility(View.VISIBLE);
 
 

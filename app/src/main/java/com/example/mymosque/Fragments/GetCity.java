@@ -11,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import com.example.mymosque.API;
 import com.example.mymosque.Adapter.AdapterCity;
@@ -48,6 +49,7 @@ View v;
         recyclerView=v.findViewById(R.id.PostalCode_RV);
         manager=new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(manager);
+        fetchcities("http://masjidi.co.uk/api/");
         return v;
     }
 public void fetchcities(String url){
@@ -66,7 +68,7 @@ public void fetchcities(String url){
 
         @Override
         public void onFailure(Call<List<City>> call, Throwable t) {
-
+            Toast.makeText(getContext(),"unable to fetch"+t.getCause(),Toast.LENGTH_LONG).show();
         }
     });
 

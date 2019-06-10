@@ -22,4 +22,11 @@ public interface API {
     Call<List<JamaatTimes>> getjamaatTimes(@Path("userid") int userid,@Path("curr_date") String curr_date);
     @GET("getcity")
     Call<List<City>> getCitiesList();
+    @GET("getNearestJummahpostalcode/{userid}/{postcode}")
+    Call<List<NearestJummah>> getJummafromPostalCode(@Path("userid") int userid,@Path("postcode") int postcode);
+    @GET("getNearestJummahpostalcode/{userid}/{city}")
+    Call<List<NearestJummah>> getJummafromCity(@Path("userid") int userid,@Path("city") String city);
+    @GET("getNearestJummahpostalcode/{userid}/{city}/{postcode}")
+    Call<List<NearestJummah>> getJummafromboth(@Path("userid") int userid,@Path("city") String city,@Path("postcode") int postcode);
+
 }

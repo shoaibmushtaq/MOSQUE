@@ -39,12 +39,13 @@ public class AdapterCity extends RecyclerView.Adapter<AdapterCity.ViewHolder> {
         this.modelList = Names;
 
     }
+    View v;
     @NonNull
     @Override
     public AdapterCity.ViewHolder onCreateViewHolder (@NonNull ViewGroup parent, int viewType){
 
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_city, parent, false);
-        return new AdapterCity.ViewHolder(view);
+        v = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_city, parent, false);
+        return new AdapterCity.ViewHolder(v);
 
 
     }
