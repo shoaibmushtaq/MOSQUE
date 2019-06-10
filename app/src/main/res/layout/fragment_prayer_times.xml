@@ -43,6 +43,7 @@
 
 
             <TextView
+                android:id="@+id/islamic_date"
                 android:layout_below="@id/text_date"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -60,45 +61,60 @@
 
         </RelativeLayout>
     </android.support.v7.widget.CardView>
+<RelativeLayout
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_below="@id/card_"
+    android:id="@+id/butonlayout"
+    android:layout_centerHorizontal="true">
 
+    <Button
+        android:id="@+id/ApplyAlarm"
+        android:layout_width="@dimen/_140sdp"
+        android:layout_height="@dimen/_30sdp"
 
-    <TextView
-        android:layout_below="@id/card_"
-        android:id="@+id/txt_adhan_notification"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/adhannotification"
-        android:layout_marginTop="@dimen/_10sdp"
-        android:textSize="@dimen/_18sdp"
-        android:textColor="#00587A"
-        android:layout_marginLeft="@dimen/_10sdp"/>
+        android:layout_centerHorizontal="true"
+        android:layout_marginLeft="@dimen/_11sdp"
+        android:layout_marginTop="23dp"
+        android:layout_marginRight="@dimen/_11sdp"
+        android:layout_marginBottom="@dimen/_10sdp"
+        android:background="#0396AB"
+        android:fontFamily="@font/segoeuiregular"
+        android:text="Apply Alarm"
+        android:textAllCaps="false"
+        android:textColor="@color/white"
+        android:textSize="@dimen/_12sdp"
+        android:textStyle="bold" />
+    <Button
+        android:id="@+id/DisableAlarm"
+        android:layout_width="@dimen/_140sdp"
+        android:layout_height="@dimen/_30sdp"
 
-    <Switch
-        android:id="@+id/Switch_Notification_"
-        android:layout_toEndOf="@id/txt_adhan_notification"
-        android:layout_alignBaseline="@id/txt_adhan_notification"
-        android:layout_alignParentEnd="true"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:shadowColor="@color/colorPrimary"
-        android:textColorHighlight="@color/colorPrimary"
-        android:thumbTint="@color/colorPrimary"
-        android:layout_marginRight="@dimen/_10sdp"/>
+        android:layout_centerHorizontal="true"
+        android:layout_marginLeft="@dimen/_11sdp"
+        android:layout_marginTop="23dp"
+        android:visibility="gone"
+        android:layout_marginRight="@dimen/_11sdp"
+        android:layout_marginBottom="@dimen/_10sdp"
+        android:background="#0396AB"
+        android:fontFamily="@font/segoeuiregular"
+        android:text="Disable Alarm"
+        android:textAllCaps="false"
+        android:textColor="@color/white"
+        android:textSize="@dimen/_12sdp"
+        android:textStyle="bold" />
+</RelativeLayout>
 
-
-
-    <android.support.v4.view.ViewPager
-        xmlns:android="http://schemas.android.com/apk/res/android"
+    <android.support.v4.view.ViewPager xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
         android:id="@+id/viewPager"
-        android:layout_below="@id/Switch_Notification_"
         android:layout_width="@dimen/_300sdp"
         android:layout_height="@dimen/_220sdp"
-        android:layout_marginTop="@dimen/_30sdp"
-        android:layout_marginRight="@dimen/_4sdp"
-        android:layout_marginLeft="@dimen/_4sdp"
-        android:layout_centerVertical="true"
+        android:layout_below="@+id/butonlayout"
         android:layout_centerHorizontal="true"
+        android:layout_marginLeft="@dimen/_4sdp"
+        android:layout_marginTop="52dp"
+        android:layout_marginRight="@dimen/_4sdp"
 
 
         />

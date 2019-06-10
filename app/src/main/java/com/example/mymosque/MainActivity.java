@@ -35,6 +35,8 @@ import com.example.mymosque.Fragments.FragmentNotification;
 import com.example.mymosque.Fragments.FragmentQiblaDirection;
 import com.example.mymosque.Fragments.FragmentSettings;
 
+
+
 import static android.app.PendingIntent.getActivity;
 import static android.icu.lang.UCharacter.GraphemeClusterBreak.V;
 
@@ -51,6 +53,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
         /*Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         TextView mTitle = (TextView) toolbar.findViewById(R.id.toolbar_title);
         setSupportActionBar(toolbar);
