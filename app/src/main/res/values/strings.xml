@@ -23,5 +23,6 @@
     <string name="fajr_"><b>"Fajr"</b></string>
     <string name="begning_num"><b>"1"</b></string>
     <string name="jamaattimes"><b>"Jamaat Times"</b></string>
+    <string name="title_activity_maps">Map</string>
 
 </resources>

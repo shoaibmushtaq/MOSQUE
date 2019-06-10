@@ -6,39 +6,67 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 
 import com.example.mymosque.AdapterRVFavorite;
+import com.example.mymosque.Models.LinksModel;
+import com.example.mymosque.Models.MasjidModel;
+import com.example.mymosque.Models.MetaModel;
 import com.example.mymosque.R;
 import com.example.mymosque.RV_FindMasajid;
+import com.example.mymosque.Retrofit.ApiClient;
+import com.example.mymosque.Retrofit.ApiInterface;
+import com.example.mymosque.Retrofit.MasjidArrayList;
 
 import java.util.ArrayList;
 
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
 public class FragmentFavorite extends Fragment {
 
-    View v;
+    private View favouriteView;
 
     private ArrayList<String> MasajidName = new ArrayList<>();
+    //Declaring varriables
+    private RecyclerView recyclerView;
+    private LinearLayoutManager layoutManager;
+    private AdapterRVFavorite adapter;
+    private ApiInterface apiInterface;
+    private MasjidArrayList masjidArrayList;
+    private ArrayList<MasjidModel> mosqueDataList;
+    private int userId = 147;
 
-    @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        
-
-    }//end of onCreate method
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        v = inflater.inflate(R.layout.fragment_favorite, container, false);
+        favouriteView = inflater.inflate(R.layout.fragment_favorite, container, false);
 
+        initComponents();
+
+        fetchFavourites();
+
+
+
+
+        return favouriteView;
+    }//End onCreateView Method
+
+
+    private void initComponents() {
 
 
         //<For Toolbar>
@@ -49,46 +77,62 @@ public class FragmentFavorite extends Fragment {
         mTitle.setText("Favorite");
         //</For Toolbar>
 
-
-
-        RecyclerViewMasajid();
-
-
-
-
-        return v;
-    }//End onCreateView Method
-
-
-    public void RecyclerViewMasajid(){
-        MasajidName.add("Masjid-e-Nagina");
-        MasajidName.add("Masjid-e-Aqsa");
-        MasajidName.add("Masjid-e-Iqra");
-        MasajidName.add("Masjid-e-Tooba");
-        MasajidName.add("Masjid-e-Ayesha");
-        MasajidName.add("Masjid-e-Nabvi");
-
-
-
-
-
-
-        RecyclerView recyclerView =(RecyclerView) v.findViewById(R.id.RV_FavoriteList);
-        LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false);
+         recyclerView = (RecyclerView) favouriteView.findViewById(R.id.RV_FavoriteList);
+         layoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false);
+        apiInterface = ApiClient.getApiClient().create(ApiInterface.class);
         recyclerView.setLayoutManager(layoutManager);
-        AdapterRVFavorite adapter = new AdapterRVFavorite(getActivity(),MasajidName);
-        recyclerView.setAdapter(adapter);
 
 
 
 
     }
 
+    private void fetchFavourites(){
+
+        Call<ArrayList<MasjidModel>> call = apiInterface.getFavoriteList(userId);
+
+        Log.d("favourites","hello");
+
+
+        call.enqueue(new Callback<ArrayList<MasjidModel>>() {
+            @Override
+            public void onResponse(Call<ArrayList<MasjidModel>> call, Response<ArrayList<MasjidModel>> response) {
+
+                mosqueDataList= response.body();
+
+
+                Log.d("favouritesTesting",""+mosqueDataList.get(1).getName());
+
+                adapter = new AdapterRVFavorite(getActivity(), mosqueDataList);
+                recyclerView.setAdapter(adapter);
 
 
 
+            }
+
+            @Override
+            public void onFailure(Call<ArrayList<MasjidModel>> call, Throwable t) {
+
+            }
+        });
 
 
-
+    }
 
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

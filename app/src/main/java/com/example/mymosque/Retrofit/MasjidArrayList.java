@@ -19,6 +19,8 @@ public class MasjidArrayList {
     @SerializedName("meta")
     private MetaModel metaModel;
 
+    private ArrayList<MasjidModel> favouriteArrayList;
+
 
 
     public ArrayList<MasjidModel> getMasjidModelArrayList() {
@@ -37,4 +39,7 @@ public class MasjidArrayList {
         return metaModel;
     }
 
+    public ArrayList<MasjidModel> getFavouriteArrayList() {
+        return favouriteArrayList;
+    }
 }

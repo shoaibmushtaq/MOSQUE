@@ -1,20 +1,17 @@
 package com.example.mymosque.Fragments;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
-import android.view.Gravity;
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.example.mymosque.MapsActivity;
 import com.example.mymosque.R;
 
 public class FragmentMyMosque extends Fragment {
@@ -63,12 +60,13 @@ public class FragmentMyMosque extends Fragment {
         });
 
 
-        Button mosqueBtn = (Button) v.findViewById(R.id.MosqueBTN);
-        mosqueBtn.setOnClickListener(new View.OnClickListener() {
+        Button mapButton = (Button) v.findViewById(R.id.VIewonMapBTN);
+        mapButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                AppCompatActivity activity = (AppCompatActivity) v.getContext();
-                activity.getSupportFragmentManager().beginTransaction().replace(R.id.Screen_Area,new FragmentPrayerTimes()).commit();
+
+                startActivity(new Intent(getContext(), MapsActivity.class));
+
             }
         });
 

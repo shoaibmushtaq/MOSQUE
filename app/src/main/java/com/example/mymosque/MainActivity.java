@@ -34,6 +34,9 @@ import com.example.mymosque.Fragments.FragmentNearestMasajid;
 import com.example.mymosque.Fragments.FragmentNotification;
 import com.example.mymosque.Fragments.FragmentQiblaDirection;
 import com.example.mymosque.Fragments.FragmentSettings;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.iid.FirebaseInstanceId;
+import com.google.firebase.iid.InstanceIdResult;
 
 import static android.app.PendingIntent.getActivity;
 import static android.icu.lang.UCharacter.GraphemeClusterBreak.V;
@@ -45,6 +48,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     ImageView backbutton;
     TextView shareapp;
     private DrawerLayout drawerLayout;
+    public static final String REQ_TOKEN = "REQ_TOKEN";
 
 
     @Override
@@ -56,6 +60,17 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         setSupportActionBar(toolbar);
         mTitle.setText("Home");
         getSupportActionBar().setDisplayShowTitleEnabled(false);*/
+
+        //it will get the current token and store it in newToken varriable
+        FirebaseInstanceId.getInstance().getInstanceId().addOnSuccessListener(MainActivity.this,new OnSuccessListener<InstanceIdResult>() {
+            @Override
+            public void onSuccess(InstanceIdResult instanceIdResult) {
+                String newToken = instanceIdResult.getToken();
+                Log.d(REQ_TOKEN,newToken);
+            }
+        });
+
+
 
         shareapp = (TextView) findViewById(R.id.text12);
 

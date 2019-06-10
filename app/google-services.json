@@ -1,0 +1,98 @@
+{
+  "project_info": {
+    "project_number": "677632974661",
+    "firebase_url": "https://smk-tek.firebaseio.com",
+    "project_id": "smk-tek",
+    "storage_bucket": "smk-tek.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:677632974661:android:6ef3a2587faa3b03",
+        "android_client_info": {
+          "package_name": "com.example.muhammadshoaib.azantimings"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "677632974661-e5ouq7i9mjoduclv9d8i255a6h30flcs.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDfutSgeCj4TMxqQHyCMdg2MMNzZ1LIOko"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "677632974661-e5ouq7i9mjoduclv9d8i255a6h30flcs.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:677632974661:android:3b2c81b939b20586",
+        "android_client_info": {
+          "package_name": "com.example.muhammadshoaib.firebasetest"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "677632974661-e5ouq7i9mjoduclv9d8i255a6h30flcs.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDfutSgeCj4TMxqQHyCMdg2MMNzZ1LIOko"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "677632974661-e5ouq7i9mjoduclv9d8i255a6h30flcs.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:677632974661:android:85e39eedd3e49091",
+        "android_client_info": {
+          "package_name": "com.example.mymosque"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "677632974661-e5ouq7i9mjoduclv9d8i255a6h30flcs.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDfutSgeCj4TMxqQHyCMdg2MMNzZ1LIOko"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "677632974661-e5ouq7i9mjoduclv9d8i255a6h30flcs.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

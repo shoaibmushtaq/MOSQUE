@@ -48,8 +48,9 @@
                 android:background="@drawable/edt_round_background_"
                 android:fontFamily="@font/segoeuiregular"
                 android:hint="Search Masajid"
-                android:focusable="false"
                 android:inputType="text"
+                android:focusable="false"
+                android:textColor="@android:color/black"
                 android:paddingHorizontal="@dimen/_12sdp"
                 android:textColorHint="@color/colorPrimary"
                 android:textSize="@dimen/_14sdp" />
@@ -85,6 +86,17 @@
     android:layout_width="match_parent"
     android:layout_centerHorizontal="true"
     android:layout_height="match_parent"/>
+    
+    <ProgressBar
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:id="@+id/progress_bar"
+        android:visibility="gone"
+        />
+
+
 
 
 

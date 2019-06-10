@@ -23,13 +23,15 @@ import android.widget.Toast;
 import com.example.mymosque.Fragments.FragementProfile;
 import com.example.mymosque.Fragments.FragmentFeedback;
 import com.example.mymosque.Fragments.FragmentNearestMasajid;
+import com.example.mymosque.Models.MasjidModel;
 import com.example.mymosque.R;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
 public class AdapterRVFavorite extends RecyclerView.Adapter<com.example.mymosque.AdapterRVFavorite.ViewHolder> implements View.OnClickListener {
 
-    private ArrayList<String> MasajidNames = new ArrayList<>();
+    private ArrayList<MasjidModel> MasajidNames = new ArrayList<>();
 
     private Context mContext;
 
@@ -38,7 +40,7 @@ public class AdapterRVFavorite extends RecyclerView.Adapter<com.example.mymosque
 
 
 
-    public AdapterRVFavorite(Context Context, ArrayList<String> Names) {
+    public AdapterRVFavorite(Context Context, ArrayList<MasjidModel> Names) {
         this.mContext = Context;
         this.MasajidNames = Names;
 
@@ -56,7 +58,11 @@ public class AdapterRVFavorite extends RecyclerView.Adapter<com.example.mymosque
     @Override
     public void onBindViewHolder (@NonNull com.example.mymosque.AdapterRVFavorite.ViewHolder holder, final int position){
 
-        holder.MasajidName.setText(MasajidNames.get(position));
+        holder.MasajidName.setText(MasajidNames.get(position).getName());
+
+        holder.MasajidName.setText(MasajidNames.get(position).getName());
+        holder.MasajidAddress.setText(MasajidNames.get(position).getAddress());
+        Picasso.get().load(MasajidNames.get(position).getImageUrl()).into(holder.Image);
 
 
         /*holder.Image.setOnClickListener(this);
@@ -86,8 +92,12 @@ public class AdapterRVFavorite extends RecyclerView.Adapter<com.example.mymosque
 
     public  class ViewHolder extends RecyclerView.ViewHolder {
 
-        TextView MasajidName;
+
+
+        TextView MasajidName,MasajidAddress,MasajidMiles;
         ImageView Image;
+        RelativeLayout Layout;
+
 
         public ViewHolder(View itemView) {
             super(itemView);
@@ -95,6 +105,8 @@ public class AdapterRVFavorite extends RecyclerView.Adapter<com.example.mymosque
 
             MasajidName  = itemView.findViewById(R.id.txt_Masajid);
             Image = itemView.findViewById(R.id.img_);
+            MasajidAddress= itemView.findViewById(R.id.txt_address_);
+            MasajidMiles=itemView.findViewById(R.id.TextMiles);
 
 
         }
