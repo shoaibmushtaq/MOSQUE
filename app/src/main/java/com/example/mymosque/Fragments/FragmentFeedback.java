@@ -1,6 +1,8 @@
 package com.example.mymosque.Fragments;
 
 import android.app.ActionBar;
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -33,6 +35,8 @@ public class FragmentFeedback  extends Fragment {
     private Button sendFeedback;
     private String feedbackMessage,feedbackName,feedbackContact;
     private ApiInterface apiInterface;
+    private SharedPreferences userPreferences;
+    private int userId;
 
 
 
@@ -40,6 +44,9 @@ public class FragmentFeedback  extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         feedbackView = inflater.inflate(R.layout.fragment_feedback, container, false);
+
+        userPreferences = getActivity().getSharedPreferences("USER_PREFERENCE", Context.MODE_PRIVATE);
+        userId = userPreferences.getInt("ID", 0);
 
         //initializing components
         initComponents();
@@ -124,7 +131,7 @@ public class FragmentFeedback  extends Fragment {
             }
 
 
-            sendfeedback(147,feedbackMessage,feedbackContact,feedbackName);
+            sendfeedback(userId,feedbackMessage,feedbackContact,feedbackName);
             Toast.makeText(getActivity(),"Your Mosque Request Sent to the Admin", Toast.LENGTH_SHORT).show();
             feedback.setText("");
             contact.setText("");

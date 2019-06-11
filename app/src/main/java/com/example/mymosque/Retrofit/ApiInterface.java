@@ -2,9 +2,13 @@ package com.example.mymosque.Retrofit;
 
 
 import com.example.mymosque.Models.AskImam;
+import com.example.mymosque.Models.Favourite;
 import com.example.mymosque.Models.MasjidModel;
 import com.example.mymosque.Models.Message;
 import com.example.mymosque.Models.NotificationModel;
+import com.example.mymosque.Models.PrimaryMosque;
+import com.example.mymosque.Models.PrimaryMosqueData;
+import com.example.mymosque.Models.UserId;
 
 import java.util.ArrayList;
 
@@ -20,8 +24,8 @@ public interface ApiInterface {
 
 
     //declaring abstract method to get list from server , here the model is an arraylist
-    @GET("getMosquesList/147")
-    Call<MasjidArrayList> getMosqueList(@Query("page") int page);
+    @GET("getMosquesList/{u_id}")
+    Call<MasjidArrayList> getMosqueList(@Path("u_id")int userId,@Query("page") int page );
 
     @FormUrlEncoded
     @POST("requestmosque")
@@ -64,8 +68,41 @@ public interface ApiInterface {
 
 
 
+    @FormUrlEncoded
+    @POST("createuser")
+    Call<UserId> GetUserID(@Field("emi")  String emi);
+
+    @FormUrlEncoded
+    @POST("getprimarymosque")
+    Call<PrimaryMosqueData> getprimrary(@Field("userid") int userid);
 
 
+
+    //SetFavouriteFunction call
+    @FormUrlEncoded
+    @POST("setprimary")
+    Call<PrimaryMosque> SetPrimary(
+            @Field("u_id") int  u_id,
+            @Field("m_id") int  m_id
+    );
+
+    @FormUrlEncoded
+    @POST("farvoriate")
+    Call<Favourite> SetFavourite(
+            @Field("m_id") int  m_id,
+            @Field("u_id") int  u_id
+
+    );
+
+
+
+
+    @FormUrlEncoded
+    @POST("farvoriate/{id}")
+    Call<Favourite> Unfavourite(
+            @Path("id") int id,
+            @Field("favoriate")  int favoriate
+    );
 
 
 

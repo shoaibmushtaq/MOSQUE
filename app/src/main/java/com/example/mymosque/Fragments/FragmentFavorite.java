@@ -1,6 +1,8 @@
 package com.example.mymosque.Fragments;
 
 import android.app.Activity;
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -48,12 +50,17 @@ public class FragmentFavorite extends Fragment {
     private ApiInterface apiInterface;
     private MasjidArrayList masjidArrayList;
     private ArrayList<MasjidModel> mosqueDataList;
-    private int userId = 147;
+    private int userId;
+    private SharedPreferences userPreferences;
 
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         favouriteView = inflater.inflate(R.layout.fragment_favorite, container, false);
+
+        //intializing shared preference to store user details and set user id to 0 from shared preference
+        userPreferences = getActivity().getSharedPreferences("USER_PREFERENCE", Context.MODE_PRIVATE);
+        userId = userPreferences.getInt("ID", 0);
 
         initComponents();
 
@@ -66,8 +73,8 @@ public class FragmentFavorite extends Fragment {
     }//End onCreateView Method
 
 
+    //initializing components
     private void initComponents() {
-
 
         //<For Toolbar>
         android.support.v7.widget.Toolbar toolbar = (android.support.v7.widget.Toolbar) getActivity().findViewById(R.id.toolbar);
@@ -79,19 +86,19 @@ public class FragmentFavorite extends Fragment {
 
          recyclerView = (RecyclerView) favouriteView.findViewById(R.id.RV_FavoriteList);
          layoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false);
-        apiInterface = ApiClient.getApiClient().create(ApiInterface.class);
-        recyclerView.setLayoutManager(layoutManager);
+         apiInterface = ApiClient.getApiClient().create(ApiInterface.class);
+         recyclerView.setLayoutManager(layoutManager);
 
 
 
 
     }
 
+
+    //getting favourite mosque list from server and display in recycler view
     private void fetchFavourites(){
 
         Call<ArrayList<MasjidModel>> call = apiInterface.getFavoriteList(userId);
-
-        Log.d("favourites","hello");
 
 
         call.enqueue(new Callback<ArrayList<MasjidModel>>() {
@@ -101,11 +108,8 @@ public class FragmentFavorite extends Fragment {
                 mosqueDataList= response.body();
 
 
-                Log.d("favouritesTesting",""+mosqueDataList.get(1).getName());
-
                 adapter = new AdapterRVFavorite(getActivity(), mosqueDataList);
                 recyclerView.setAdapter(adapter);
-
 
 
             }

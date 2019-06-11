@@ -8,6 +8,11 @@ public class MasjidModel {
     private String latitude;
     private String imageurl;
     private String address;
+
+    public void setFarvoriate(int farvoriate) {
+        this.farvoriate = farvoriate;
+    }
+
     private int farvoriate;
     private int farvoriate_id;
     private int miles;

@@ -1,6 +1,5 @@
 package com.example.mymosque;
 
-import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.media.MediaPlayer;
@@ -20,14 +19,15 @@ import bg.devlabs.fullscreenvideoview.FullscreenVideoView;
 
 public class NotificationDetailScreen extends AppCompatActivity {
 
-    private String FileName, FilePath, Type, Description, Time;
-    private ImageView Image_Notify, Play, Pause, Stop;
-    private TextView Time_Notify, Description_Notify;
-    private FullscreenVideoView VideoView;
-    private SeekBar AudioView;
-    private int SeekValue;
-    private RelativeLayout LayoutAudioButtons;
-    private MediaPlayer AudioLink;
+    //declaring varriables
+    private String fileName, filePath, type, description, time;
+    private ImageView imageNotify, play, pause, stop;
+    private TextView timeNotify, descriptionNotify;
+    private FullscreenVideoView videoView;
+    private SeekBar audioView;
+    private int seekValue;
+    private RelativeLayout layoutAudioButtons;
+    private MediaPlayer audioLink;
     private String path;
 
     @Override
@@ -35,9 +35,13 @@ public class NotificationDetailScreen extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_notification_detail_screen);
 
+        //hiding action bar
         getSupportActionBar().hide();
 
-        AudioLink = new MediaPlayer();
+
+
+        //starting media player
+        audioLink = new MediaPlayer();
 
         ImageView Back_BTN = findViewById(R.id.Back_BTN);
         Back_BTN.setOnClickListener(new View.OnClickListener() {
@@ -52,53 +56,65 @@ public class NotificationDetailScreen extends AppCompatActivity {
 
         });
 
-        InitViews();
-        VideoView.setVisibility(View.GONE);
-        Image_Notify.setVisibility(View.GONE);
-        AudioView.setVisibility(View.GONE);
-        LayoutAudioButtons.setVisibility(View.GONE);
+        initViews();
 
+
+        videoView.setVisibility(View.GONE);
+        imageNotify.setVisibility(View.GONE);
+        audioView.setVisibility(View.GONE);
+        layoutAudioButtons.setVisibility(View.GONE);
+
+
+        //getting notifications from shared preferences
         SharedPreferences Notification = getSharedPreferences("NotificationFragment", MODE_PRIVATE);
-        FileName = Notification.getString("M_Filename", null);
-        FilePath = Notification.getString("M_Filepath", null);
-        Type = Notification.getString("M_Type", null);
-        Description = Notification.getString("M_Description_", null);
-        Time = Notification.getString("M_Time", null);
+        fileName = Notification.getString("M_Filename", null);
+        filePath = Notification.getString("M_Filepath", null);
+        type = Notification.getString("M_Type", null);
+        description = Notification.getString("M_Description_", null);
+        time = Notification.getString("M_Time", null);
 
-        if (Type.equals("I")) {
+        if (type.equals("I")) {
 
-            Image_Notify.setVisibility(View.VISIBLE);
-            path = "http://masjidi.co.uk/panel/userpanel/uploads/advertsments/" + FileName;
+            imageNotify.setVisibility(View.VISIBLE);
+            path = "http://masjidi.co.uk/panel/userpanel/uploads/advertsments/" + fileName;
 
-            Picasso.get().load(path).into(Image_Notify);
+            Picasso.get().load(path).into(imageNotify);
 
-            Description_Notify.setText(Description);
-            Time_Notify.setText(Time);
+            descriptionNotify.setText(description);
+            timeNotify.setText(time);
 
-        } else if (Type.equals("V")) {
+        }
 
-            VideoView.setVisibility(View.VISIBLE);
-            path = "http://masjidi.co.uk/panel/userpanel/uploads/advertsments/" + FileName;
-            VideoView.videoUrl(path).enableAutoStart().fastForwardSeconds(5).rewindSeconds(5);
-            Description_Notify.setText(Description);
-            Time_Notify.setText(Time);
 
-        } else if (Type.equals("T")) {
+        else if (type.equals("V")) {
 
-            Description_Notify.setText(Description);
-            Time_Notify.setText(Time);
+            videoView.setVisibility(View.VISIBLE);
+            path = "http://masjidi.co.uk/panel/userpanel/uploads/advertsments/" + fileName;
+            videoView.videoUrl(path).enableAutoStart().fastForwardSeconds(5).rewindSeconds(5);
+            descriptionNotify.setText(description);
+            timeNotify.setText(time);
 
-        } else if (Type.equals("A")) {
-            path = "http://masjidi.co.uk/panel/userpanel/uploads/advertsments/" + FileName;
-            AudioView.setVisibility(View.VISIBLE);
-            LayoutAudioButtons.setVisibility(View.VISIBLE);
-            Description_Notify.setText(Description);
-            Time_Notify.setText(Time);
+        }
+
+        else if (type.equals("T")) {
+
+            descriptionNotify.setText(description);
+            timeNotify.setText(time);
+
+        }
+
+        else if (type.equals("A")) {
+            path = "http://masjidi.co.uk/panel/userpanel/uploads/advertsments/" + fileName;
+            audioView.setVisibility(View.VISIBLE);
+            layoutAudioButtons.setVisibility(View.VISIBLE);
+            descriptionNotify.setText(description);
+            timeNotify.setText(time);
             SeekThread seekThread = new SeekThread();
             seekThread.start();
         }
 
-        Play.setOnClickListener(new View.OnClickListener() {
+
+        play.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
@@ -108,25 +124,25 @@ public class NotificationDetailScreen extends AppCompatActivity {
             }
         });
 
-        Pause.setOnClickListener(new View.OnClickListener() {
+        pause.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 PauseAudio();
             }
         });
 
-        Stop.setOnClickListener(new View.OnClickListener() {
+        stop.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 StopAudio();
             }
         });
 
-        AudioView.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+        audioView.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
 
-                SeekValue=progress;
+                seekValue =progress;
 
 
             }
@@ -140,7 +156,7 @@ public class NotificationDetailScreen extends AppCompatActivity {
             public void onStopTrackingTouch(SeekBar seekBar) {
 
 
-                AudioLink.seekTo(SeekValue);
+                audioLink.seekTo(seekValue);
             }
         });
 
@@ -149,43 +165,42 @@ public class NotificationDetailScreen extends AppCompatActivity {
     }
 
 
-    public  void  InitViews(){
+    public  void initViews(){
 
-        Image_Notify=findViewById(R.id.Image_Des);
-        Time_Notify=findViewById(R.id.Date_Text);
-        Description_Notify=findViewById(R.id.Text_Description_D);
-        VideoView=findViewById(R.id.fullscreenVideoView);
-        AudioView=findViewById(R.id.AudioView_);
-        LayoutAudioButtons=findViewById(R.id.AudioLayout);
-        Play=findViewById(R.id.Audio_Play);
-        Pause=findViewById(R.id.Audio_Pause);
-        Stop=findViewById(R.id.Audio_Stop);
+        imageNotify =findViewById(R.id.Image_Des);
+        timeNotify =findViewById(R.id.Date_Text);
+        descriptionNotify =findViewById(R.id.Text_Description_D);
+        videoView =findViewById(R.id.fullscreenVideoView);
+        audioView =findViewById(R.id.AudioView_);
+        layoutAudioButtons =findViewById(R.id.AudioLayout);
+        play =findViewById(R.id.Audio_Play);
+        pause =findViewById(R.id.Audio_Pause);
+        stop =findViewById(R.id.Audio_Stop);
 
 
     }
-
     public  void PlayAudio(){
         try {
-            AudioLink.setDataSource(path);
-            AudioLink.prepare();
-            AudioLink.start();
+            audioLink.setDataSource(path);
+            audioLink.prepare();
+            audioLink.start();
         } catch (IOException e) {
             e.printStackTrace();
         }
 
     }
     public  void PauseAudio(){
-        if(AudioLink.isPlaying()){
-            AudioLink.pause();
+        if(audioLink.isPlaying()){
+            audioLink.pause();
         }
 
 
     }
     public  void StopAudio(){
 
-        if(AudioLink.isPlaying()){
-            AudioLink.release();
-            AudioLink=null;
+        if(audioLink.isPlaying()){
+            audioLink.release();
+            audioLink =null;
         }
 
 
@@ -207,8 +222,8 @@ public class NotificationDetailScreen extends AppCompatActivity {
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        if (AudioLink != null) {
-                            AudioView.setProgress(AudioLink.getDuration());
+                        if (audioLink != null) {
+                            audioView.setProgress(audioLink.getDuration());
 
 
                         }

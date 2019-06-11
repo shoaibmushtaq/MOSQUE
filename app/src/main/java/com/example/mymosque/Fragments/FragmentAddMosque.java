@@ -35,6 +35,7 @@ public class FragmentAddMosque extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
+        //inflating the view
         addMosqueView = inflater.inflate(R.layout.fragment_add_mosque, container, false);
 
 
@@ -44,7 +45,6 @@ public class FragmentAddMosque extends Fragment {
 
         //initializing components listeners
         listeners();
-
 
 
 

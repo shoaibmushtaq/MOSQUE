@@ -26,10 +26,6 @@ public class OnBoarding extends AppCompatActivity {
 
 
 
-
-
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -49,8 +45,21 @@ public class OnBoarding extends AppCompatActivity {
 
 
         if(!isFirstTimeStartApp()) {
-            startMainActivity();
-            finish();
+
+            SharedPreferences sharedPreference = getSharedPreferences("USER_PREFERENCE", Context.MODE_PRIVATE);
+            int  userId = sharedPreference.getInt("ID", 0);
+
+            if (userId == 0){
+
+
+                startPermissionActivity();
+                finish();
+            }
+
+            else {
+                startMainActivity();
+                finish();
+            }
         }
 
 
@@ -62,7 +71,8 @@ public class OnBoarding extends AppCompatActivity {
             @Override
             public void onClick(View view) {
 
-                startMainActivity();
+                startPermissionActivity();
+                finish();
             }
         });
 
@@ -74,7 +84,9 @@ public class OnBoarding extends AppCompatActivity {
                     //move to next page
                     viewPager.setCurrentItem(currentPage);
                 } else {
-                    startMainActivity();
+
+                    startPermissionActivity();
+                    finish();
                 }
             }
         });
@@ -163,6 +175,13 @@ public class OnBoarding extends AppCompatActivity {
         startActivity(new Intent(OnBoarding.this, MainActivity.class));
         finish();
     }
+
+    private void startPermissionActivity(){
+        setFirstTimeStartStatus(false);
+        startActivity(new Intent(OnBoarding.this, PermissionActivity.class));
+        finish();
+    }
+
     private void setStatusBarTransparent(){
         if (Build.VERSION.SDK_INT >= 21){
             getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_STABLE|View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);

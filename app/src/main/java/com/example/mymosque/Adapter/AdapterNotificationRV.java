@@ -10,13 +10,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-
 import com.example.mymosque.Models.NotificationModel;
 import com.example.mymosque.NotificationDetailScreen;
 import com.example.mymosque.R;
-
 import java.util.ArrayList;
-import java.util.HashMap;
 
 import static android.content.Context.MODE_PRIVATE;
 
@@ -24,10 +21,9 @@ import static android.content.Context.MODE_PRIVATE;
 public class AdapterNotificationRV extends RecyclerView.Adapter<AdapterNotificationRV.NotificationViewHolder> {
 
 
-        ArrayList<NotificationModel>modelList;
+    //declaring varriables
+        private ArrayList<NotificationModel>modelList;
         private Context mContext;
-
-
         private static final String TAG = "AdapterNotificationRV";
 
 
@@ -37,10 +33,13 @@ public class AdapterNotificationRV extends RecyclerView.Adapter<AdapterNotificat
             this.modelList = Names;
 
         }
+
+
         @NonNull
         @Override
         public NotificationViewHolder onCreateViewHolder (@NonNull ViewGroup parent, int viewType){
 
+            //inflating layout
             View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_notification_rv, parent, false);
             return new NotificationViewHolder(view);
 
@@ -51,12 +50,11 @@ public class AdapterNotificationRV extends RecyclerView.Adapter<AdapterNotificat
         public void onBindViewHolder (@NonNull NotificationViewHolder holder, final int position){
 
 
+            holder.description.setText(modelList.get(position).getDescription());
+            holder.timeStamp.setText(modelList.get(position).getTimestamp());
 
-            holder.Description.setText(modelList.get(position).getDescription());
-            holder.TimeStamp.setText(modelList.get(position).getTimestamp());
 
-
-            holder.Layout.setOnClickListener(new View.OnClickListener() {
+            holder.layout.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
 
@@ -81,8 +79,6 @@ public class AdapterNotificationRV extends RecyclerView.Adapter<AdapterNotificat
 
 
 
-
-
         }
 
         @Override
@@ -90,22 +86,21 @@ public class AdapterNotificationRV extends RecyclerView.Adapter<AdapterNotificat
             return modelList.size();
         }
 
+
+
+        //view holder class
         public class NotificationViewHolder extends RecyclerView.ViewHolder {
 
-            TextView Description,TimeStamp;
-            RelativeLayout  Layout;
-
+            TextView description, timeStamp;
+            RelativeLayout layout;
 
 
             public NotificationViewHolder(View itemView) {
                 super(itemView);
 
-                Description= itemView.findViewById(R.id.Text_Description);
-                TimeStamp  = itemView.findViewById(R.id.Time_);
-                Layout=itemView.findViewById(R.id.layoutNotification);
-
-
-
+                description = itemView.findViewById(R.id.Text_Description);
+                timeStamp = itemView.findViewById(R.id.Time_);
+                layout =itemView.findViewById(R.id.layoutNotification);
 
 
             }

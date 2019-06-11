@@ -18,15 +18,10 @@ import java.util.Objects;
 public class AdapterAskimamRV extends RecyclerView.Adapter<AdapterAskimamRV.ViewHolder>{
 
 
-
-    ArrayList<HashMap<String, String>> modelList;
-
+    //declaring varriables
+    private ArrayList<HashMap<String, String>> modelList;
     private Context mContext;
-    double CurrentLatitude,CurrentLongitude,DestinationLatitude,DestinationLongitude;
-    String Miles;
     private static final String TAG = "AdapterRVFavorite";
-
-
 
 
     public AdapterAskimamRV(Context Context, ArrayList<HashMap<String, String>> Names) {
@@ -34,10 +29,13 @@ public class AdapterAskimamRV extends RecyclerView.Adapter<AdapterAskimamRV.View
         this.modelList = Names;
 
     }
+
+
     @NonNull
     @Override
-    public    AdapterAskimamRV.ViewHolder onCreateViewHolder (@NonNull ViewGroup parent, int viewType){
+    public AdapterAskimamRV.ViewHolder onCreateViewHolder (@NonNull ViewGroup parent, int viewType){
 
+        //inflating layout
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_askimam_question_answers, parent, false);
         return new AdapterAskimamRV.ViewHolder(view);
 
@@ -49,13 +47,13 @@ public class AdapterAskimamRV extends RecyclerView.Adapter<AdapterAskimamRV.View
 
         if (Objects.equals(modelList.get(position).get("answer"), "")) {
 
-            holder.AnswerByImam_Right.setText("Waiting For Imam Answer");
-            holder.QuestionByUser_Left.setText(modelList.get(position).get("questiion_"));
+            holder.answersByImam.setText("Waiting For Imam Answer");
+            holder.questionsByUser.setText(modelList.get(position).get("questiion_"));
         }else{
 
 
-            holder.AnswerByImam_Right.setText(modelList.get(position).get("answer"));
-            holder.QuestionByUser_Left.setText(modelList.get(position).get("questiion_"));
+            holder.answersByImam.setText(modelList.get(position).get("answer"));
+            holder.questionsByUser.setText(modelList.get(position).get("questiion_"));
         }
 
 
@@ -70,9 +68,11 @@ public class AdapterAskimamRV extends RecyclerView.Adapter<AdapterAskimamRV.View
 
 
 
+
+    //view holder class
     public  class ViewHolder extends RecyclerView.ViewHolder {
 
-        TextView AnswerByImam_Right,QuestionByUser_Left;
+        TextView answersByImam, questionsByUser;
 
 
 
@@ -80,8 +80,8 @@ public class AdapterAskimamRV extends RecyclerView.Adapter<AdapterAskimamRV.View
             super(itemView);
 
 
-            AnswerByImam_Right  = itemView.findViewById(R.id.AnswerByImam_Right);
-            QuestionByUser_Left= itemView.findViewById(R.id.QuestionByUser_Left);
+            answersByImam = itemView.findViewById(R.id.AnswerByImam_Right);
+            questionsByUser = itemView.findViewById(R.id.QuestionByUser_Left);
 
 
         }

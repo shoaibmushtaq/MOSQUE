@@ -3,46 +3,37 @@ package com.example.mymosque;
 
 
 
-import android.annotation.SuppressLint;
 import android.content.Context;
-import android.content.Intent;
+import android.content.SharedPreferences;
 import android.support.annotation.NonNull;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentTransaction;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.example.mymosque.Fragments.FragementProfile;
-import com.example.mymosque.Fragments.FragmentFeedback;
-import com.example.mymosque.Fragments.FragmentNearestMasajid;
 import com.example.mymosque.Models.MasjidModel;
-import com.example.mymosque.R;
+import com.google.android.gms.maps.model.LatLng;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
-public class AdapterRVFavorite extends RecyclerView.Adapter<com.example.mymosque.AdapterRVFavorite.ViewHolder> implements View.OnClickListener {
+import static android.content.Context.MODE_PRIVATE;
+import static com.google.maps.android.SphericalUtil.computeDistanceBetween;
 
-    private ArrayList<MasjidModel> MasajidNames = new ArrayList<>();
+public class AdapterRVFavorite extends RecyclerView.Adapter<com.example.mymosque.AdapterRVFavorite.ViewHolder> {
 
+    private ArrayList<MasjidModel> masajidNames = new ArrayList<>();
     private Context mContext;
-
-
+    private double currentLatitude , currentLongitude, destinationLatitude,destinationLongitude;
     private static final String TAG = "RecyclerViewAdapter_F_ADS";
 
 
-
-    public AdapterRVFavorite(Context Context, ArrayList<MasjidModel> Names) {
-        this.mContext = Context;
-        this.MasajidNames = Names;
+    public AdapterRVFavorite(Context context, ArrayList<MasjidModel> names) {
+        this.mContext = context;
+        this.masajidNames = names;
 
     }
     @NonNull
@@ -58,22 +49,27 @@ public class AdapterRVFavorite extends RecyclerView.Adapter<com.example.mymosque
     @Override
     public void onBindViewHolder (@NonNull com.example.mymosque.AdapterRVFavorite.ViewHolder holder, final int position){
 
-        holder.MasajidName.setText(MasajidNames.get(position).getName());
+        holder.masajidName.setText(masajidNames.get(position).getName());
 
-        holder.MasajidName.setText(MasajidNames.get(position).getName());
-        holder.MasajidAddress.setText(MasajidNames.get(position).getAddress());
-        Picasso.get().load(MasajidNames.get(position).getImageUrl()).into(holder.Image);
+        holder.masajidName.setText(masajidNames.get(position).getName());
+        holder.masajidAddress.setText(masajidNames.get(position).getAddress());
+        Picasso.get().load(masajidNames.get(position).getImageUrl()).into(holder.image);
 
+        destinationLatitude = Double.parseDouble(masajidNames.get(position).getLatitude());
+        destinationLongitude = Double.parseDouble(masajidNames.get(position).getLongtitude());
 
-        /*holder.Image.setOnClickListener(this);
-        holder.MasajidName.setOnClickListener(this);*/
-        holder.itemView.setOnClickListener(this);
-
-
-
-
+        SharedPreferences prefs = mContext.getSharedPreferences("LatLong", MODE_PRIVATE);
+        currentLongitude = Double.parseDouble(prefs.getString("Long",""));
+        currentLatitude =Double.parseDouble(prefs.getString("Lat",""));
 
 
+        //calculating distance between two locations
+        LatLng CurreLatlng = new LatLng(currentLatitude, currentLongitude);
+        LatLng DesLatlng = new LatLng(destinationLatitude, destinationLongitude);
+        Double meters = computeDistanceBetween(DesLatlng, CurreLatlng);
+        double miles = meters / 1609.344;
+
+        holder.masajidMiles.setText(String.format("%.2f", miles));
 
 
     }
@@ -81,36 +77,35 @@ public class AdapterRVFavorite extends RecyclerView.Adapter<com.example.mymosque
 
     @Override
     public int getItemCount () {
-        return MasajidNames.size();
+        return masajidNames.size();
     }
 
-    @Override
-    public void onClick(View v) {
 
-    }
 
 
     public  class ViewHolder extends RecyclerView.ViewHolder {
 
 
 
-        TextView MasajidName,MasajidAddress,MasajidMiles;
-        ImageView Image;
-        RelativeLayout Layout;
+        TextView masajidName, masajidAddress, masajidMiles;
+        ImageView image;
+        RelativeLayout layout;
 
 
         public ViewHolder(View itemView) {
             super(itemView);
 
 
-            MasajidName  = itemView.findViewById(R.id.txt_Masajid);
-            Image = itemView.findViewById(R.id.img_);
-            MasajidAddress= itemView.findViewById(R.id.txt_address_);
-            MasajidMiles=itemView.findViewById(R.id.TextMiles);
+            masajidName = itemView.findViewById(R.id.txt_Masajid);
+            image = itemView.findViewById(R.id.img_);
+            masajidAddress = itemView.findViewById(R.id.txt_address_);
+            masajidMiles =itemView.findViewById(R.id.TextMiles);
 
 
         }
     }
+
+
 
 
 }

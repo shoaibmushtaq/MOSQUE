@@ -2,6 +2,7 @@ package com.example.mymosque.Fragments;
 
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -33,10 +34,13 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+import static android.content.Context.MODE_PRIVATE;
+
 public class FragmentAskImam extends Fragment {
 
 
 
+    //declaring varriables
     private View askImamView;
     private EditText questionEdittext;
     private Button   sendBtn;
@@ -47,19 +51,12 @@ public class FragmentAskImam extends Fragment {
     private String question;
     private ArrayList<HashMap<String, String>> AnswersList ;
     private LinearLayoutManager linearLayoutManager;
+    private SharedPreferences userPreference , primaryMosquePreference;
 
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-
-
-
-
-
-
-
 
 
 
@@ -69,22 +66,29 @@ public class FragmentAskImam extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
 
+        //inflating the view
         askImamView = inflater.inflate(R.layout.fragment_ask_imam, container, false);
 
+        //getting user id from shared preference
+        userPreference = getContext().getSharedPreferences("USER_PREFERENCE", MODE_PRIVATE);
+        userId = userPreference.getInt("ID",0);
+
+
+        //getting primary mosque from shared preference
+         primaryMosquePreference = getContext().getSharedPreferences("GetPrimaryMosque", MODE_PRIVATE);
+         primaryMosqueId = primaryMosquePreference.getInt("PM_ID", 0);
+
+
+
+
+        //initializing components
         initComponents();
 
+        //setting click isteners
         listeners();
 
+        //calling method
         getAnswersFromImam();
-
-
-
-
-
-
-
-
-
 
 
         return askImamView;
@@ -93,9 +97,8 @@ public class FragmentAskImam extends Fragment {
 
 
 
+    //initializing components
     private void initComponents(){
-
-
 
         //<For Toolbar>
         android.support.v7.widget.Toolbar toolbar = (android.support.v7.widget.Toolbar) getActivity().findViewById(R.id.toolbar);
@@ -105,8 +108,7 @@ public class FragmentAskImam extends Fragment {
         //</For Toolbar>
 
 
-        primaryMosqueId = 19;
-        userId = 147;
+
 
         questionEdittext =(EditText) askImamView.findViewById(R.id.msgEDT);
         sendBtn= askImamView.findViewById(R.id.BTN_SEND);
@@ -120,6 +122,7 @@ public class FragmentAskImam extends Fragment {
         recyclerView = askImamView.findViewById(R.id.RV_Questions_Answers);
     }
 
+    //setting click listeners
     private void listeners() {
 
 
@@ -145,10 +148,10 @@ public class FragmentAskImam extends Fragment {
     }
 
 
+    //sending question to server
     private void setQuestionIntoServer(int mosqueId,int userId1,String question1){
 
 
-        Log.d("testingEditText",questionEdittext.getText().toString());
         Call<ArrayList<AskImam>> call = apiInterface.AskImam(mosqueId,userId1,question1);
 
         call.enqueue(new Callback<ArrayList<AskImam>>() {
@@ -175,6 +178,7 @@ public class FragmentAskImam extends Fragment {
     }
 
 
+    //getting answers from server
     private void getAnswersFromImam(){
 
         Call<ArrayList<AskImam>> call = apiInterface.imamAnswers(primaryMosqueId,userId);

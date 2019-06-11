@@ -1,5 +1,7 @@
 package com.example.mymosque.Fragments;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.NonNull;
@@ -53,28 +55,20 @@ public class FragmentMasajidList extends Fragment {
     private MetaModel metaModel;
     private boolean isLoading = false;
     private ProgressBar progressBar;
+    private SharedPreferences userPreferences;
+    private int userId;
 
     private ArrayList<String> MasajidName = new ArrayList<>();
 
-    @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-
-
-
-
-
-
-
-
-
-    }//end of onCreate method
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
         //intializing view and inflate the layout xml file
         masjidListView = inflater.inflate(R.layout.fragment_masajid_list, container, false);
+
+        userPreferences = getActivity().getSharedPreferences("USER_PREFERENCE", Context.MODE_PRIVATE);
+        userId = userPreferences.getInt("ID", 0);
 
 
         // initializing decalared components
@@ -117,7 +111,6 @@ public class FragmentMasajidList extends Fragment {
     }
 
 
-
     private void listeners() {
 
         //on scroll listener of recycler view
@@ -152,7 +145,7 @@ public class FragmentMasajidList extends Fragment {
     private void fetchDataFromServerAndPopulateView() {
 
 
-        Call<MasjidArrayList> call = apiInterface.getMosqueList(pageNo);
+        Call<MasjidArrayList> call = apiInterface.getMosqueList(userId,pageNo);
 
         call.enqueue(new Callback<MasjidArrayList>() {
             @Override
@@ -185,7 +178,7 @@ public class FragmentMasajidList extends Fragment {
     private void fetchDataForPagination(){
 
 
-        Call<MasjidArrayList> call = apiInterface.getMosqueList(pageNo);
+        Call<MasjidArrayList> call = apiInterface.getMosqueList(userId,pageNo);
 
         call.enqueue(new Callback<MasjidArrayList>() {
             @Override

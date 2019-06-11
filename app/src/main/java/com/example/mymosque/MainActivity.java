@@ -2,9 +2,13 @@ package com.example.mymosque;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
+import android.location.Location;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
@@ -34,46 +38,57 @@ import com.example.mymosque.Fragments.FragmentNearestMasajid;
 import com.example.mymosque.Fragments.FragmentNotification;
 import com.example.mymosque.Fragments.FragmentQiblaDirection;
 import com.example.mymosque.Fragments.FragmentSettings;
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.iid.InstanceIdResult;
 
+import static android.Manifest.permission.ACCESS_COARSE_LOCATION;
+import static android.Manifest.permission.ACCESS_FINE_LOCATION;
 import static android.app.PendingIntent.getActivity;
 import static android.icu.lang.UCharacter.GraphemeClusterBreak.V;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, View.OnClickListener {
 
-    ImageView Humbburger;
-    DrawerLayout mDrawerLayout;
-    ImageView backbutton;
-    TextView shareapp;
+    private ImageView Humbburger;
+    private DrawerLayout mDrawerLayout;
+    private ImageView backbutton;
+    private TextView shareapp;
     private DrawerLayout drawerLayout;
     public static final String REQ_TOKEN = "REQ_TOKEN";
+    private TextView homeTextView,favouritesTextView,masajidListTextView,nearestMasjidTextView,nearestJummahTextView,qiblaDirectionTextView
+                     ,notificationTextView,addMosqueTextView,duaTextView,settingsTextView,feedbackTextView;
+
+    private boolean doubleBackToExitPressedOnce = false;
+    private Fragment fragment = null;
+
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        /*Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        TextView mTitle = (TextView) toolbar.findViewById(R.id.toolbar_title);
-        setSupportActionBar(toolbar);
-        mTitle.setText("Home");
-        getSupportActionBar().setDisplayShowTitleEnabled(false);*/
+
+        //getting user's current location
+        getLastLocation();
+
+
+
 
         //it will get the current token and store it in newToken varriable
-        FirebaseInstanceId.getInstance().getInstanceId().addOnSuccessListener(MainActivity.this,new OnSuccessListener<InstanceIdResult>() {
+        FirebaseInstanceId.getInstance().getInstanceId().addOnSuccessListener(MainActivity.this, new OnSuccessListener<InstanceIdResult>() {
             @Override
             public void onSuccess(InstanceIdResult instanceIdResult) {
                 String newToken = instanceIdResult.getToken();
-                Log.d(REQ_TOKEN,newToken);
+                Log.d(REQ_TOKEN, newToken);
             }
         });
 
 
 
-        shareapp = (TextView) findViewById(R.id.text12);
 
+        shareapp = (TextView) findViewById(R.id.text12);
         shareapp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -88,15 +103,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             }
 
 
-
         });
-
 
 
         //Button Calls Navigation view
         backbutton = (ImageView) findViewById(R.id.backButton);
         Humbburger = (ImageView) findViewById(R.id.humburgerIcon);
-        mDrawerLayout = (DrawerLayout)findViewById(R.id.drawer_layout);
+        mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         Humbburger.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -114,53 +127,83 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             }
 
 
-
         });
 
 
+        homeTextView = (TextView) findViewById(R.id.text1);
+        homeTextView.setOnClickListener(this);
 
-        TextView home_ = (TextView) findViewById(R.id.text1);
-        home_.setOnClickListener(this);
-        TextView Feedback_ = (TextView) findViewById(R.id.text11);
-        Feedback_.setOnClickListener(this);
-        TextView Dua_ = (TextView) findViewById(R.id.text9);
-        Dua_.setOnClickListener(this);
-        TextView fragmentmassajilist_ = (TextView) findViewById(R.id.text3);
-        fragmentmassajilist_.setOnClickListener(this);
-        TextView fragmentnearestmassajid_ = (TextView) findViewById(R.id.text4);
-        fragmentnearestmassajid_.setOnClickListener(this);
-        TextView fragmentnearestjummah_ = (TextView) findViewById(R.id.text5);
-        fragmentnearestjummah_.setOnClickListener(this);
-        TextView fragmentsettings_ = (TextView) findViewById(R.id.text10);
-        fragmentsettings_.setOnClickListener(this);
-        TextView fragmentnotification_ = (TextView) findViewById(R.id.text7);
-        fragmentnotification_.setOnClickListener(this);
-        TextView fragmentaddmosque_ = (TextView) findViewById(R.id.text8);
-        fragmentaddmosque_.setOnClickListener(this);
-        TextView fragqibla = (TextView) findViewById(R.id.text6);
-        fragqibla.setOnClickListener(this);
-        TextView fragmentfavorite = (TextView) findViewById(R.id.text2);
-        fragmentfavorite.setOnClickListener(this);
+        feedbackTextView = (TextView) findViewById(R.id.text11);
+        feedbackTextView.setOnClickListener(this);
+
+        duaTextView = (TextView) findViewById(R.id.text9);
+        duaTextView.setOnClickListener(this);
+
+        masajidListTextView = (TextView) findViewById(R.id.text3);
+        masajidListTextView.setOnClickListener(this);
+
+        nearestMasjidTextView = (TextView) findViewById(R.id.text4);
+        nearestMasjidTextView.setOnClickListener(this);
+
+        nearestJummahTextView = (TextView) findViewById(R.id.text5);
+        nearestJummahTextView.setOnClickListener(this);
+
+        settingsTextView = (TextView) findViewById(R.id.text10);
+        settingsTextView.setOnClickListener(this);
+
+        notificationTextView = (TextView) findViewById(R.id.text7);
+        notificationTextView.setOnClickListener(this);
+
+        addMosqueTextView = (TextView) findViewById(R.id.text8);
+        addMosqueTextView.setOnClickListener(this);
+
+        qiblaDirectionTextView = (TextView) findViewById(R.id.text6);
+        qiblaDirectionTextView.setOnClickListener(this);
+
+        favouritesTextView = (TextView) findViewById(R.id.text2);
+        favouritesTextView.setOnClickListener(this);
         //
 
 
-        FragmentHome myf = new FragmentHome();
-        android.support.v4.app.FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-        transaction.add(R.id.Screen_Area, myf);
-        transaction.commit();
+        //initializing shared preference and getting primary mosque id
+        SharedPreferences sharedPreferences = getApplicationContext().getSharedPreferences("GetPrimaryMosque", MODE_PRIVATE);
+        int primaryId = sharedPreferences.getInt("PM_ID", 0);
+
+
+        //checking if primary mosque id is not equal to zero then display primary mosque fragment
+        if (primaryId != 0) {
+
+
+            /*FragmentMyMosque primaryMosque = new FragmentMyMosque();
+            android.support.v4.app.FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+            transaction.add(R.id.Screen_Area, primaryMosque);
+            transaction.commit();*/
+
+            FragmentHome myf = new FragmentHome();
+            android.support.v4.app.FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+            transaction.add(R.id.Screen_Area, myf);
+            transaction.commit();
+
+
+        }
+
+        //else display home fragment
+        else {
+
+            FragmentHome myf = new FragmentHome();
+            android.support.v4.app.FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+            transaction.add(R.id.Screen_Area, myf);
+            transaction.commit();
+
+        }
 
 
 
-       /* DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-        drawer.addDrawerListener(toggle);
 
-        toggle.syncState();*/
 
+        //initializing drawer layout and action bar toggle
         drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
-
-        ActionBarDrawerToggle actionBarDrawerToggle = new ActionBarDrawerToggle(this, drawerLayout,  R.string.navigation_drawer_open, R.string.navigation_drawer_close) {
+        ActionBarDrawerToggle actionBarDrawerToggle = new ActionBarDrawerToggle(this, drawerLayout, R.string.navigation_drawer_open, R.string.navigation_drawer_close) {
 
             @Override
             public void onDrawerClosed(View v) {
@@ -190,55 +233,15 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
 
 
-
-
-
-        /*toolbar.setNavigationOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-                if (drawerLayout.isDrawerOpen(Gravity.RIGHT)) {
-                    drawerLayout.closeDrawer(Gravity.RIGHT);
-                } else {
-                    drawerLayout.openDrawer(Gravity.RIGHT);
-                }
-            }
-        });*/
-
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
 
-
-
-
-
-
-
     }
 
+    //end of oncreate method
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    private boolean doubleBackToExitPressedOnce = false;
 
 
     @Override
@@ -255,8 +258,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             super.onBackPressed();
             return;
 
-        }
-        else{
+        } else {
 
             showHome();
         }
@@ -273,31 +275,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }, 2000);
 
 
-
     }
 
 
-
- /*@Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.main, menu);
-        return true;
-    }*/
-    /*@Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
-    }*/
 
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
@@ -323,14 +303,17 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
-    Fragment fragment = null;
-    private  void showHome(){
+
+
+
+    //this method will direct to home fragment
+    private void showHome() {
 
         fragment = new FragmentHome();
-        if(fragment!=null){
+        if (fragment != null) {
 
             FragmentManager manager = getSupportFragmentManager();
-            manager.beginTransaction().replace(R.id.Screen_Area, fragment ,fragment.getTag()).commit();
+            manager.beginTransaction().replace(R.id.Screen_Area, fragment, fragment.getTag()).commit();
         }
     }
 
@@ -339,74 +322,51 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         Fragment fragment = null;
         Class fragmentClass = null;
 
-        if(v.getId() == R.id.text1)
-        {
+        if (v.getId() == R.id.text1) {
             //do something here if button1 is clicked
 
             fragmentClass = FragmentMyMosque.class;
-        }
-
-        else if (v.getId() == R.id.text4)
-        {
+        } else if (v.getId() == R.id.text4) {
             fragmentClass = FragmentNearestMasajid.class;
             //do something here if button3 is clicked
-           // fragmentClass = FragmentLevel.class;
-        }else if (v.getId() == R.id.text5){
+            // fragmentClass = FragmentLevel.class;
+        } else if (v.getId() == R.id.text5) {
             //do something here if button3 is clicked
-           // fragmentClass = FragmentNotification.class;
+            // fragmentClass = FragmentNotification.class;
             fragmentClass = FragmentNearestJummah.class;
-        }
-        else if (v.getId() == R.id.text6)
-        {
+        } else if (v.getId() == R.id.text6) {
             //do something here if button3 is clicked
-           // fragmentClass = FragmentAboutUS.class;
+            // fragmentClass = FragmentAboutUS.class;
             fragmentClass = FragmentQiblaDirection.class;
-        }
-        else if (v.getId() == R.id.text11)
-        {
+        } else if (v.getId() == R.id.text11) {
             //do something here if button3 is clicked
-           fragmentClass = FragmentFeedback.class;
-        }
-        else if (v.getId() == R.id.text9)
-        {
+            fragmentClass = FragmentFeedback.class;
+        } else if (v.getId() == R.id.text9) {
             //do something here if button3 is clicked
             fragmentClass = FragmentDua.class;
-        }
-        else if (v.getId() == R.id.text3)
-        {
+        } else if (v.getId() == R.id.text3) {
             //do something here if button3 is clicked
             fragmentClass = FragmentMasajidList.class;
-        }
-        else if (v.getId() == R.id.text10)
-        {
+        } else if (v.getId() == R.id.text10) {
             //do something here if button3 is clicked
             fragmentClass = FragmentSettings.class;
-        }
-
-        else if (v.getId() == R.id.text7)
-        {
+        } else if (v.getId() == R.id.text7) {
             //do something here if button3 is clicked
             fragmentClass = FragmentNotification.class;
-        }
-
-        else if (v.getId() == R.id.text8)
-        {
+        } else if (v.getId() == R.id.text8) {
             //do something here if button3 is clicked
             fragmentClass = FragmentAddMosque.class;
-        }
-        else if (v.getId() == R.id.text2)
-        {
+        } else if (v.getId() == R.id.text2) {
             //do something here if button3 is clicked
             fragmentClass = FragmentFavorite.class;
         }
 
 
-        if(fragment!=null){
+        if (fragment != null) {
 
             FragmentManager manager = getSupportFragmentManager();
-            manager.beginTransaction().replace(R.id.Screen_Area, fragment ,fragment.getTag()).commit();
+            manager.beginTransaction().replace(R.id.Screen_Area, fragment, fragment.getTag()).commit();
         }
-
 
 
         try {
@@ -422,12 +382,29 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         drawer.closeDrawer(GravityCompat.START);
 
 
-
-
-
-
     }
 
 
+    //this method will get current location and put the data in shared preference
+    public void getLastLocation() {
+        if (ActivityCompat.checkSelfPermission(this, ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+
+            //Getting user last location
+            FusedLocationProviderClient fusedLocation = LocationServices.getFusedLocationProviderClient(this);
+            fusedLocation.getLastLocation().addOnSuccessListener(MainActivity.this, new OnSuccessListener<Location>() {
+                @Override
+                public void onSuccess(Location location) {
+                    if (location != null) {
+                        double mLastLongitude = location.getLongitude();
+                        double mLastLatitude = location.getLatitude();
+                        SharedPreferences.Editor editor = getApplicationContext().getSharedPreferences("LatLong", MODE_PRIVATE).edit();
+                        editor.putString("Lat", String.valueOf(mLastLatitude));
+                        editor.putString("Long", String.valueOf(mLastLongitude));
+                        editor.apply();
+                    }
+                }
+            });
+        }
+    }
 
 }

@@ -1,5 +1,7 @@
 package com.example.mymosque.Fragments;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -25,36 +27,38 @@ import retrofit2.Response;
 
 public class FragmentNotification extends Fragment {
 
+    //declaring varriables
     private View notificationView;
-    private int userId = 147;
+    private int userId ;
     private ApiInterface apiInterface;
     private ArrayList<NotificationModel> notificationDataList;
     private RecyclerView recyclerView;
     private LinearLayoutManager linearLayoutManager;
     private AdapterNotificationRV adapter;
-
-
-
+    private SharedPreferences userPreferences;
 
 
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
+        //inflating the view
         notificationView = inflater.inflate(R.layout.fragment_notification, container, false);
 
+
+        //getting user id from shared preference
+        userPreferences = getContext().getSharedPreferences("USER_PREFERENCE", Context.MODE_PRIVATE);
+        userId = userPreferences.getInt("ID",0);
 
         initComponents();
 
         getNotificationsFromServer();
 
 
-
-
         return notificationView;
     }//End onCreateView Method
 
-
+//initializing components
 private void initComponents(){
 
     //<For Toolbar>
@@ -73,6 +77,8 @@ private void initComponents(){
 
 }
 
+
+//getting notifications from server
 private void getNotificationsFromServer(){
 
     Call<ArrayList<NotificationModel>> call = apiInterface.getNotifications(userId);
@@ -83,12 +89,8 @@ private void getNotificationsFromServer(){
 
             notificationDataList = response.body();
 
-            Log.d("testingNotification",notificationDataList+"");
-
             adapter = new AdapterNotificationRV(getActivity(), notificationDataList);
             recyclerView.setAdapter(adapter);
-
-
 
         }
 
@@ -100,16 +102,7 @@ private void getNotificationsFromServer(){
 
 
 
-
-
-
-
-
 }
-
-
-
-
 
 
 

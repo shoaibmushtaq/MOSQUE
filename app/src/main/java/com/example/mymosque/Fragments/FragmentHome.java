@@ -1,6 +1,7 @@
 package com.example.mymosque.Fragments;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
@@ -16,6 +17,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -47,6 +49,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 import static android.content.Context.INPUT_METHOD_SERVICE;
+import static android.content.Context.MODE_PRIVATE;
 import static android.support.v4.content.ContextCompat.getSystemService;
 
 public class FragmentHome extends Fragment {
@@ -64,19 +67,24 @@ public class FragmentHome extends Fragment {
     private int pageNo = 1;
     private MasjidArrayList masjidArrayList;
     private ArrayList<MasjidModel> mosqueDataList;
-    private LinksModel linksModel;
     private MetaModel metaModel;
     private boolean isLoading = false;
     private ProgressBar progressBar;
+    private LinksModel linksModel;
+    private SharedPreferences userPreferences;
+    private int userId;
 
 
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
+    {
 
         //intializing view and inflate the layout xml file
         homeView = inflater.inflate(R.layout.fragmenthome, container, false);
 
+        userPreferences = getContext().getSharedPreferences("USER_PREFERENCE", Context.MODE_PRIVATE);
+        userId = userPreferences.getInt("ID",0);
 
         // initializing decalared components
         initComponents();
@@ -87,6 +95,12 @@ public class FragmentHome extends Fragment {
 
         //listeners for components
         listeners();
+
+        //getting shared preferences of latitude and longitude
+        SharedPreferences prefs = getActivity().getSharedPreferences("LatLong", MODE_PRIVATE);
+        String longitude = prefs.getString("Long","");
+        String latitude = prefs.getString("Lat","");
+
 
 
         return homeView;
@@ -125,7 +139,6 @@ public class FragmentHome extends Fragment {
             public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
                 super.onScrollStateChanged(recyclerView, newState);
 
-
             }
 
             @Override
@@ -150,6 +163,7 @@ public class FragmentHome extends Fragment {
         humbburger.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 mDrawerLayout.openDrawer(Gravity.RIGHT);
             }
         });
@@ -176,13 +190,12 @@ public class FragmentHome extends Fragment {
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
 
 
-
             }
-
 
             @Override
             public void afterTextChanged(Editable editable) {
 
+                //update the adapter to show list of data which starts with given letter
                 if (adapter != null) {
                     filter(editable.toString());
                 }
@@ -200,7 +213,7 @@ public class FragmentHome extends Fragment {
     private void fetchDataFromServerAndPopulateView() {
 
 
-                Call<MasjidArrayList> call = apiInterface.getMosqueList(pageNo);
+                Call<MasjidArrayList> call = apiInterface.getMosqueList(userId,pageNo);
 
                 call.enqueue(new Callback<MasjidArrayList>() {
                     @Override
@@ -208,7 +221,10 @@ public class FragmentHome extends Fragment {
 
                         masjidArrayList = response.body();
 
+                        Log.d("aaa",""+response.code());
+
                         mosqueDataList = masjidArrayList.getMasjidModelArrayList();
+
                         linksModel = masjidArrayList.getLinksModel();
                         metaModel = masjidArrayList.getMetaModel();
 
@@ -229,11 +245,11 @@ public class FragmentHome extends Fragment {
 
     }
 
+
     //method to fetch data on scroll listener of recycler view
     private void fetchDataForPagination(){
 
-
-        Call<MasjidArrayList> call = apiInterface.getMosqueList(pageNo);
+        Call<MasjidArrayList> call = apiInterface.getMosqueList(userId,pageNo);
 
         call.enqueue(new Callback<MasjidArrayList>() {
             @Override
@@ -268,15 +284,9 @@ public class FragmentHome extends Fragment {
 
                         }
 
-
-
                         adapter.notifyDataSetChanged();
                         isLoading = false;
-
-
                         progressBar.setVisibility(View.GONE);
-
-
 
                     }
                 }, 3000);
@@ -311,6 +321,7 @@ public class FragmentHome extends Fragment {
     }
 
 
+    //this method will filter data based on search
     private void filter(String text) {
         ArrayList<MasjidModel> filteredList = new ArrayList<>();
 

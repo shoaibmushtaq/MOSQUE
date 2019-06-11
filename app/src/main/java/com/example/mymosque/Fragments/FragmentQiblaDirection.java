@@ -1,27 +1,13 @@
 package com.example.mymosque.Fragments;
 
-import android.Manifest;
-import android.annotation.SuppressLint;
-import android.content.Context;
-import android.content.DialogInterface;
-import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.pm.PackageManager;
-import android.hardware.GeomagneticField;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
-import android.location.Location;
-import android.location.LocationListener;
-import android.location.LocationManager;
 import android.os.Bundle;
-import android.provider.Settings;
-import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
-import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -29,22 +15,10 @@ import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.RotateAnimation;
 import android.widget.ImageView;
-import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.example.mymosque.DeviceOrientation;
 import com.example.mymosque.R;
 import com.github.msarhan.ummalqura.calendar.UmmalquraCalendar;
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.GoogleApiAvailability;
-import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.location.FusedLocationProviderClient;
-import com.google.android.gms.location.LocationRequest;
-import com.google.android.gms.location.LocationServices;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -52,8 +26,6 @@ import java.util.Calendar;
 import java.util.Locale;
 import java.util.Objects;
 
-import static android.Manifest.permission.ACCESS_COARSE_LOCATION;
-import static android.Manifest.permission.ACCESS_FINE_LOCATION;
 import static android.content.Context.MODE_PRIVATE;
 import static android.content.Context.SENSOR_SERVICE;
 
@@ -73,19 +45,13 @@ public class FragmentQiblaDirection extends Fragment implements SensorEventListe
     private float compassDegree, qiblaDegree;
     private static final int PERMISSION_REQUEST_CODE = 1;
 
-    private FusedLocationProviderClient mFusedLocationClient = null;
 
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-
-        mFusedLocationClient = LocationServices.getFusedLocationProviderClient(getActivity());
-
         sensorManager = (SensorManager) Objects.requireNonNull(getActivity()).getSystemService(SENSOR_SERVICE);
-
-
 
     }
 
@@ -99,20 +65,12 @@ public class FragmentQiblaDirection extends Fragment implements SensorEventListe
         //inflating the layout
         qiblaDirectionView = inflater.inflate(R.layout.fragment_qibla_direction, container, false);
 
-        requestPermissions(new String[]{
-
-                ACCESS_COARSE_LOCATION,
-                ACCESS_FINE_LOCATION
-        }, PERMISSION_REQUEST_CODE);
 
 
-        if (ActivityCompat.checkSelfPermission(getActivity(),ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
-            getUserLocation();
-        }
-
-        Log.d("userLatitude123", "" + userLatitude);
-        Log.d("userLongitude123", "" + userLongitude);
-
+        //getting shared preferences of latitude and longitude
+        SharedPreferences prefs = getActivity().getSharedPreferences("LatLong", MODE_PRIVATE);
+        userLongitude = Double.parseDouble(prefs.getString("Long",""));
+        userLatitude =Double.parseDouble(prefs.getString("Lat",""));
 
 
         //initializing componenets
@@ -122,12 +80,13 @@ public class FragmentQiblaDirection extends Fragment implements SensorEventListe
         setDateAndTime();
 
 
+        Log.d("checkLat",userLatitude+"");
+        Log.d("checkLong",userLongitude+"");
+
 
         //passing current cordinates and kaaba coordinates and calling get qibla angle method to get qibla
         qiblaAngle = getQiblaAngle(userLatitude, userLongitude, meccaLatitude, meccaLongitude);
 
-
-        Log.d("qiblaAngle", "" + qiblaAngle);
 
 
         return qiblaDirectionView;
@@ -135,53 +94,7 @@ public class FragmentQiblaDirection extends Fragment implements SensorEventListe
     //End onCreateView Method
 
 
-    @SuppressLint("MissingPermission")
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
 
-        Log.d("inside", "working");
-
-        if (requestCode == PERMISSION_REQUEST_CODE) {
-
-            Log.d("inside2", "working");
-
-            if (grantResults.length > 0) {
-
-                Log.d("inside3", "working");
-
-                if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-
-                    Log.d("inside4", "working");
-
-                    mFusedLocationClient.getLastLocation().addOnSuccessListener(location -> {
-
-                        if (location != null) {
-                            Log.d("shoaibLongitude1", "" + location.getLongitude());
-
-                            userLongitude = location.getLongitude();
-                            userLatitude = location.getLatitude();
-
-                            qiblaAngle = getQiblaAngle(userLatitude, userLongitude, meccaLatitude, meccaLongitude);
-
-                            Log.d("testLat1", "" + userLatitude);
-                        }
-
-
-                    });
-
-                }
-                else {
-
-                    Toast.makeText(getActivity(),"permission denied",Toast.LENGTH_LONG).show();
-                }
-
-
-
-
-        }
-    }
-    }
 
     //initializing components
     private void initComponents() {
@@ -280,35 +193,6 @@ public class FragmentQiblaDirection extends Fragment implements SensorEventListe
         return (float) angle;
     }
 
-    public void getUserLocation() {
-
-        Log.d("tesingLitenerOutside", "working");
-
-        if (ActivityCompat.checkSelfPermission(getActivity(), ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getActivity(), ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-
-
-            return;
-        } else {
-            Log.d("tesingLitener", "working");
-            mFusedLocationClient.getLastLocation().addOnSuccessListener(location -> {
-
-                        if (location != null) {
-                            Log.d("shLongitude", "" + location.getLongitude());
-
-                            userLongitude = location.getLongitude();
-                            userLatitude = location.getLatitude();
-
-
-                            Log.d("testLat", "" + userLatitude);
-                            Log.d("testLong", "" + userLatitude);
-                        }
-
-                    }
-            );
-        }
-
-
-    }
 
 
 
