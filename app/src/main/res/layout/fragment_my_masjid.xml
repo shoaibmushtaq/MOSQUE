@@ -119,7 +119,7 @@
                 </android.support.v7.widget.CardView>
                 <Button
                     android:id="@+id/MosqueBTN"
-                    android:layout_marginTop="@dimen/_50sdp"
+                    android:layout_marginTop="@dimen/_25sdp"
                     android:layout_below="@id/MasjidCard_"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/_59sdp"

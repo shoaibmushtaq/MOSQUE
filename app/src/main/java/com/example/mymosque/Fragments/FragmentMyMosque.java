@@ -16,6 +16,7 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.example.mymosque.LocationClass;
 import com.example.mymosque.MapsActivity;
 import com.example.mymosque.R;
 import com.google.android.gms.maps.model.LatLng;
@@ -38,6 +39,7 @@ public class FragmentMyMosque extends Fragment {
     private double currentLongitude,currentLatitude;
     private RelativeLayout primaryMosqueLayout , noPrimaryMosqueLayout;
     private Button nextScreenButton;
+    private ImageView adBanner;
 
 
 
@@ -45,13 +47,6 @@ public class FragmentMyMosque extends Fragment {
 
 
 
-    @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-
-        locationPreference = getContext().getSharedPreferences("LatLong", Context.MODE_PRIVATE);
-
-    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -67,6 +62,7 @@ public class FragmentMyMosque extends Fragment {
         primaryMosqueLayout = myMosquView.findViewById(R.id.MyPrimaryMosque);
         noPrimaryMosqueLayout=myMosquView.findViewById(R.id.HideLayout);
         nextScreenButton=myMosquView.findViewById(R.id.gotoNextScreen);
+        adBanner = myMosquView.findViewById(R.id.MosqueImage);
 
         noPrimaryMosqueLayout.setVisibility(View.GONE);
 
@@ -86,8 +82,11 @@ public class FragmentMyMosque extends Fragment {
         currentLongitude = Double.parseDouble(locationPreference.getString("Long",""));
         currentLatitude = Double.parseDouble(locationPreference.getString("Lat",""));*/
 
-         currentLongitude = Double.parseDouble(locationPreference.getString("Long", ""));
-         currentLatitude = Double.parseDouble(locationPreference.getString("Lat", ""));
+
+        locationPreference = getActivity().getSharedPreferences("LatLong", Context.MODE_PRIVATE);
+
+         currentLongitude = Double.parseDouble(locationPreference.getString("Long", "67.09"));
+         currentLatitude = Double.parseDouble(locationPreference.getString("Lat", "24.08"));
 
         Log.d("sLat",""+locationPreference.getString("Long", ""));
         Log.d("sLong",""+locationPreference.getString("Lat", ""));
@@ -182,6 +181,7 @@ public class FragmentMyMosque extends Fragment {
 
         return myMosquView;
     }//End onCreateView Method
+
 
 
 

@@ -57,12 +57,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private TextView shareapp;
     private DrawerLayout drawerLayout;
     public static final String REQ_TOKEN = "REQ_TOKEN";
-    private TextView homeTextView,favouritesTextView,masajidListTextView,nearestMasjidTextView,nearestJummahTextView,qiblaDirectionTextView
-                     ,notificationTextView,addMosqueTextView,duaTextView,settingsTextView,feedbackTextView;
+    private TextView homeTextView, favouritesTextView, masajidListTextView, nearestMasjidTextView, nearestJummahTextView, qiblaDirectionTextView, notificationTextView, addMosqueTextView, duaTextView, settingsTextView, feedbackTextView;
 
     private boolean doubleBackToExitPressedOnce = false;
     private Fragment fragment = null;
-
 
 
     @Override
@@ -70,10 +68,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+
+       /* LocationClass locationClass = new LocationClass(this);
+        locationClass.getLastLocation();*/
+
+
         //getting user's current location
-        getLastLocation();
-
-
+       getLastLocation();
 
 
         //it will get the current token and store it in newToken varriable
@@ -84,8 +85,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 Log.d(REQ_TOKEN, newToken);
             }
         });
-
-
 
 
         shareapp = (TextView) findViewById(R.id.text12);
@@ -174,14 +173,15 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         if (primaryId != 0) {
 
 
-            /*FragmentMyMosque primaryMosque = new FragmentMyMosque();
+
+           /* FragmentMyMosque myf = new FragmentMyMosque();
             android.support.v4.app.FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-            transaction.add(R.id.Screen_Area, primaryMosque);
+            transaction.replace(R.id.Screen_Area, myf);
             transaction.commit();*/
 
             FragmentHome myf = new FragmentHome();
             android.support.v4.app.FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-            transaction.add(R.id.Screen_Area, myf);
+            transaction.replace(R.id.Screen_Area, myf);
             transaction.commit();
 
 
@@ -192,13 +192,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
             FragmentHome myf = new FragmentHome();
             android.support.v4.app.FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-            transaction.add(R.id.Screen_Area, myf);
+            transaction.replace(R.id.Screen_Area, myf);
             transaction.commit();
 
         }
-
-
-
 
 
         //initializing drawer layout and action bar toggle
@@ -231,8 +228,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         actionBarDrawerToggle.syncState();
 
 
-
-
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
@@ -240,8 +235,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
     //end of oncreate method
-
-
 
 
     @Override
@@ -278,7 +271,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
 
-
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
@@ -303,7 +295,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
-
 
 
     //this method will direct to home fragment
@@ -405,6 +396,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 }
             });
         }
-    }
 
+
+    }
 }

@@ -19,6 +19,7 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 
@@ -52,6 +53,8 @@ public class FragmentFavorite extends Fragment {
     private ArrayList<MasjidModel> mosqueDataList;
     private int userId;
     private SharedPreferences userPreferences;
+    private RelativeLayout noFavouriteLayout;
+    private TextView  noFavouritesTextView;
 
 
     @Override
@@ -63,6 +66,8 @@ public class FragmentFavorite extends Fragment {
         userId = userPreferences.getInt("ID", 0);
 
         initComponents();
+
+
 
         fetchFavourites();
 
@@ -81,6 +86,9 @@ public class FragmentFavorite extends Fragment {
         toolbar.setVisibility(View.VISIBLE);
         ImageView backbutton = (ImageView) toolbar.findViewById(R.id.backButton);
         TextView mTitle = (TextView) toolbar.findViewById(R.id.toolbar_title);
+        noFavouriteLayout = favouriteView.findViewById(R.id.NotFoundLayout_);
+        noFavouritesTextView = favouriteView.findViewById(R.id.textCouldnot_);
+        noFavouriteLayout.setVisibility(View.INVISIBLE);
         mTitle.setText("Favorite");
         //</For Toolbar>
 
@@ -108,10 +116,21 @@ public class FragmentFavorite extends Fragment {
                 mosqueDataList= response.body();
 
 
-                adapter = new AdapterRVFavorite(getActivity(), mosqueDataList);
-                recyclerView.setAdapter(adapter);
+                if(mosqueDataList.isEmpty()){
+
+                    // Alert(getActivity());
+                    noFavouriteLayout.setVisibility(View.VISIBLE);
+                    noFavouritesTextView.setText("Sorry,You Have No Favourite Mosque");
 
 
+
+                }else {
+
+
+                    adapter = new AdapterRVFavorite(getActivity(), mosqueDataList);
+                    recyclerView.setAdapter(adapter);
+
+                }
             }
 
             @Override

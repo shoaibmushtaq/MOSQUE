@@ -40,7 +40,7 @@ public class FragementProfile extends Fragment {
     TextView mosqueName, mosqueAddress, mosqueMiles;
     ImageView mosqueImageView;
     String userID;
-    String mosqueImage,mosquename,mosqueID, primaryMosqueId,mosqueaddress,mosquemiles,restoredText,longitude,latitude;
+    String mosqueImage,mosquename,mosqueID, primaryMosqueId,mosqueaddress,mosquemiles,longitude,latitude;
     Button askImam;
     Button mosqueBtn;
     Button prayerTimes;
@@ -66,7 +66,6 @@ public class FragementProfile extends Fragment {
         //</For Toolbar>
 
 
-
         //getting mosque data from shared preferences
         SharedPreferences prefs = getActivity().getSharedPreferences("PassMosqueData", MODE_PRIVATE);
         mosquename=prefs.getString("M_name","not Defined");
@@ -84,7 +83,6 @@ public class FragementProfile extends Fragment {
         userID = String.valueOf(UserPerfs.getInt("ID", 0));
 
 
-
         TextView MosqueName=v.findViewById(R.id.HeadingTxt1);
         MosqueName.setText(mosquename);
 
@@ -96,7 +94,6 @@ public class FragementProfile extends Fragment {
          mosqueAddress.setText(mosqueaddress);
          mosqueMiles =v.findViewById(R.id.Txt_Miles);
         mosqueAddress.setText(mosqueaddress);
-
 
         mosqueMiles.setText(mosquemiles);
 
